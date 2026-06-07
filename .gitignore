@@ -108,3 +108,7 @@ Thumbs.db
 .turbo/
 .agents
 docs
+# clerk configuration (can include secrets)
+/.clerk/
+
+design-reference

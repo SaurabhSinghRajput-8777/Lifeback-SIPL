@@ -14,7 +14,8 @@ enum Role {
 }
 
 enum AssessmentStatus {
-  STARTED
+  DRAFT
+  IN_PROGRESS
   SUBMITTED
   PROCESSING
   COMPLETED
@@ -100,6 +101,7 @@ model AssessmentTemplate {
   id           String    @id @default(uuid()) @db.Uuid
   name         String    @db.VarChar(100)
   version      String    @db.VarChar(20)
+  config       Json      @default("{}")
   isActive     Boolean   @default(true)
   createdAt    DateTime  @default(now()) @db.Timestamptz
   deprecatedAt DateTime? @db.Timestamptz
@@ -112,7 +114,8 @@ model Assessment {
   userId             String?          @db.Uuid
   anonymousSessionId String?          @db.Uuid
   templateId         String           @db.Uuid
-  status             AssessmentStatus @default(STARTED)
+  templateSnapshot   Json             @default("{}")
+  status             AssessmentStatus @default(DRAFT)
   createdAt          DateTime         @default(now()) @db.Timestamptz
   updatedAt          DateTime         @updatedAt @db.Timestamptz
 

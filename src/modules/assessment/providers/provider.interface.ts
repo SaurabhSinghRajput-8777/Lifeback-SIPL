@@ -1,6 +1,7 @@
+import { AssessmentResult, AssessmentTemplateConfig } from "@/types/assessment";
+
 export interface AssessmentProvider {
-  validate(): Promise<boolean>;
-  submit(data: Record<string, unknown>): Promise<Record<string, unknown>>;
-  score(responses: Record<string, unknown>): Promise<number | Record<string, unknown>>;
-  generateReport(resultId: string): Promise<Record<string, unknown>>;
+  validate(responses: Record<string, unknown>, template: AssessmentTemplateConfig): Promise<boolean>;
+  score(responses: Record<string, unknown>, template: AssessmentTemplateConfig): Promise<AssessmentResult>;
+  generateSummary(result: AssessmentResult): Promise<string>;
 }

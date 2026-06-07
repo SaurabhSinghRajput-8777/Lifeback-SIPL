@@ -5,11 +5,16 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  --color-brand-primary: #121214;
+  --color-brand-secondary: #849D8E;
+  --color-brand-accent: #E8EBE9;
+  --color-brand-dark: #0A0A0B;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-sans);
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-space-mono);
+  --font-heading: var(--font-plus-jakarta);
+  --font-body: var(--font-inter);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -126,5 +131,26 @@
   }
   html {
     @apply font-sans;
+    scroll-behavior: smooth;
   }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading), ui-sans-serif, system-ui, sans-serif;
+  }
+}
+
+@layer utilities {
+  .animate-marquee {
+    animation: marquee 30s linear infinite;
+  }
+  .animate-marquee-slow {
+    animation: marquee 45s linear infinite;
+  }
+  .animate-marquee-fast {
+    animation: marquee 15s linear infinite;
+  }
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
 }
