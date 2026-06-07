@@ -1,0 +1,157 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  USER
+  CLINICIAN
+  ADMIN
+  SUPER_ADMIN
+}
+
+enum AssessmentStatus {
+  STARTED
+  SUBMITTED
+  PROCESSING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+enum ConsentType {
+  PRIVACY_POLICY
+  TERMS
+  VOICE_RECORDING
+  AI_PROCESSING
+  RESEARCH
+}
+
+enum AcceptanceMethod {
+  CHECKBOX
+  EXPLICIT_BUTTON
+  API_PARAM
+}
+
+model User {
+  id        String   @id @default(uuid()) @db.Uuid
+  clerkId   String   @unique
+  email     String   @unique
+  role      Role     @default(USER)
+  createdAt DateTime @default(now()) @db.Timestamptz
+  updatedAt DateTime @updatedAt @db.Timestamptz
+
+  consents          UserConsent[]
+  assessments       Assessment[]
+  anonymousSessions AnonymousSession[]
+}
+
+model AnonymousSession {
+  id              String    @id @default(uuid()) @db.Uuid
+  anonymousId     String    @unique @db.VarChar(128)
+  ipHash          String?   @db.VarChar(128)
+  userAgentHash   String?   @db.VarChar(128)
+  convertedUserId String?   @db.Uuid
+  convertedAt     DateTime? @db.Timestamptz
+  assessmentData  Json      @default("{}")
+  createdAt       DateTime  @default(now()) @db.Timestamptz
+  expiresAt       DateTime  @db.Timestamptz
+
+  user        User?         @relation(fields: [convertedUserId], references: [id])
+  assessments Assessment[]
+  consents    UserConsent[]
+}
+
+model ConsentVersion {
+  id            String      @id @default(uuid()) @db.Uuid
+  consentType   ConsentType
+  version       String      @db.VarChar(20)
+  title         String      @db.VarChar(200)
+  contentHash   String      @db.VarChar(128)
+  contentUrl    String      @db.VarChar(500)
+  effectiveDate DateTime    @db.Timestamptz
+  supersededAt  DateTime?   @db.Timestamptz
+  isActive      Boolean     @default(true)
+  createdAt     DateTime    @default(now()) @db.Timestamptz
+
+  userConsents UserConsent[]
+}
+
+model UserConsent {
+  id                 String           @id @default(uuid()) @db.Uuid
+  userId             String?          @db.Uuid
+  anonymousSessionId String?          @db.Uuid
+  consentVersionId   String           @db.Uuid
+  acceptanceMethod   AcceptanceMethod
+  ipHash             String?          @db.VarChar(128)
+  acceptedAt         DateTime         @default(now()) @db.Timestamptz
+  revokedAt          DateTime?        @db.Timestamptz
+  revocationReason   String?          @db.VarChar(500)
+
+  user             User?             @relation(fields: [userId], references: [id])
+  anonymousSession AnonymousSession? @relation(fields: [anonymousSessionId], references: [id])
+  consentVersion   ConsentVersion    @relation(fields: [consentVersionId], references: [id])
+}
+
+model AssessmentTemplate {
+  id           String    @id @default(uuid()) @db.Uuid
+  name         String    @db.VarChar(100)
+  version      String    @db.VarChar(20)
+  isActive     Boolean   @default(true)
+  createdAt    DateTime  @default(now()) @db.Timestamptz
+  deprecatedAt DateTime? @db.Timestamptz
+
+  assessments Assessment[]
+}
+
+model Assessment {
+  id                 String           @id @default(uuid()) @db.Uuid
+  userId             String?          @db.Uuid
+  anonymousSessionId String?          @db.Uuid
+  templateId         String           @db.Uuid
+  status             AssessmentStatus @default(STARTED)
+  createdAt          DateTime         @default(now()) @db.Timestamptz
+  updatedAt          DateTime         @updatedAt @db.Timestamptz
+
+  user             User?                @relation(fields: [userId], references: [id])
+  anonymousSession AnonymousSession?    @relation(fields: [anonymousSessionId], references: [id])
+  template         AssessmentTemplate   @relation(fields: [templateId], references: [id])
+  responses        AssessmentResponse[]
+  report           AssessmentReport?
+}
+
+model AssessmentResponse {
+  id           String   @id @default(uuid()) @db.Uuid
+  assessmentId String   @db.Uuid
+  questionId   String   @db.VarChar(100)
+  answer       Json
+  createdAt    DateTime @default(now()) @db.Timestamptz
+
+  assessment Assessment @relation(fields: [assessmentId], references: [id])
+}
+
+model AssessmentReport {
+  id                  String   @id @default(uuid()) @db.Uuid
+  assessmentId        String   @unique @db.Uuid
+  modelVersion        String   @db.VarChar(50)
+  pipelineVersion     String   @db.VarChar(50)
+  reportSchemaVersion String   @db.VarChar(20)
+  riskLevel           String?  @db.VarChar(50)
+  confidenceScore     Float?
+  reportJson          Json
+  generatedAt         DateTime @default(now()) @db.Timestamptz
+
+  assessment Assessment @relation(fields: [assessmentId], references: [id])
+}
+
+model AuditLog {
+  id         String   @id @default(uuid()) @db.Uuid
+  userId     String?  @db.Uuid
+  eventType  String   @db.VarChar(100)
+  resourceId String?  @db.Uuid
+  metadata   Json     @default("{}")
+  createdAt  DateTime @default(now()) @db.Timestamptz
+}
