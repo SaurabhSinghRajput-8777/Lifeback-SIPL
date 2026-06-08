@@ -10,11 +10,24 @@ export async function POST(req: Request) {
   try {
     const { userId } = await auth();
     const cookieStore = await cookies();
-    let anonymousId = cookieStore.get("anonymous_id")?.value;
+    const anonymousId = cookieStore.get("anonymous_id")?.value;
 
-    if (!userId && !anonymousId) {
-      const session = await AnonymousSessionService.createSession();
-      anonymousId = session.anonymousId;
+    let dbSessionId: string | undefined = undefined;
+
+    if (!userId) {
+      if (anonymousId) {
+        // Look up existing session to get the primary key 'id'
+        const session = await AnonymousSessionService.getSessionByAnonymousId(anonymousId);
+        if (session) {
+          dbSessionId = session.id;
+        }
+      } 
+      
+      if (!dbSessionId) {
+        // Create new session if no cookie or if session wasn't found in DB
+        const session = await AnonymousSessionService.createSession();
+        dbSessionId = session.id;
+      }
     }
 
     const body = await req.json();
@@ -25,12 +38,17 @@ export async function POST(req: Request) {
     const assessment = await AssessmentService.startAssessment(
       body.templateName,
       userId || undefined,
-      anonymousId || undefined
+      dbSessionId
     );
 
     return NextResponse.json(assessment, { status: 201 });
   } catch (error: unknown) {
+    console.error("[POST /api/assessments/start] ERROR CAUGHT:", error);
+    if (error instanceof Error && error.stack) {
+      console.error("[POST /api/assessments/start] STACK TRACE:", error.stack);
+    }
     const message = error instanceof Error ? error.message : "Internal Server Error";
-    return NextResponse.json({ error: message }, { status: 500 });
+    const stack = error instanceof Error ? error.stack : undefined;
+    return NextResponse.json({ error: message, stack }, { status: 500 });
   }
 }

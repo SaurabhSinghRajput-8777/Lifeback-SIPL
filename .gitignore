@@ -112,3 +112,19 @@ docs
 /.clerk/
 
 design-reference
+
+# Documentation
+*.md
+!README.md
+!SKILL.md
+!CONTRIBUTING.md
+
+# -----------------------------------------------------------------------------
+# Scratch/Test Scripts
+# -----------------------------------------------------------------------------
+test-*.ts
+test-*.js
+test-*.mjs
+check-*.ts
+check-*.js
+check-*.mjs

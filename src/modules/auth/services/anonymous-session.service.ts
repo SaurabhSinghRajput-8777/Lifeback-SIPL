@@ -36,6 +36,10 @@ export class AnonymousSessionService {
 
     if (!anonymousId) return null;
 
+    return this.getSessionByAnonymousId(anonymousId);
+  }
+
+  static async getSessionByAnonymousId(anonymousId: string) {
     return prisma.anonymousSession.findUnique({
       where: { anonymousId },
     });

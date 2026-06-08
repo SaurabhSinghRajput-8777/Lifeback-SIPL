@@ -45,9 +45,7 @@ export function Footer() {
           <p className="max-w-6xl font-body text-[14px] leading-7 text-foreground/80">
             {disclaimer}
           </p>
-          <p className="mt-5 font-body text-[14px] leading-7 text-foreground/80">
-            iCall: 9152987821 | Vandrevala Foundation: 1860-2662-345 | NIMHANS: 080-46110007
-          </p>
+
           <p className="mt-8 font-mono text-[12px] uppercase tracking-[0.14em] text-foreground/60">
             © 2026 LifeBack. All rights reserved.
           </p>

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Plus_Jakarta_Sans, Space_Mono } from "next/font/google";
+import { Inter, Plus_Jakarta_Sans, Space_Mono, Dancing_Script } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({
@@ -15,6 +15,11 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 const spaceMono = Space_Mono({
   weight: ["400", "700"],
   variable: "--font-space-mono",
+  subsets: ["latin"],
+});
+
+const dancingScript = Dancing_Script({
+  variable: "--font-dancing",
   subsets: ["latin"],
 });
 
@@ -37,9 +42,10 @@ export default function RootLayout({
     <ClerkProvider>
       <html
         lang="en"
-        className={`${inter.variable} ${plusJakartaSans.variable} ${spaceMono.variable} h-full antialiased`}
+        className={`${inter.variable} ${plusJakartaSans.variable} ${spaceMono.variable} ${dancingScript.variable} h-full antialiased`}
+        suppressHydrationWarning
       >
-        <body className="min-h-full flex flex-col font-body bg-background text-foreground">
+        <body suppressHydrationWarning className="min-h-full flex flex-col font-body bg-background text-foreground">
           <Header />
           {children}
           <Footer />
