@@ -1,11 +1,12 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+import { AUTH_ROUTES } from "@/config/routes";
 import { NextResponse } from "next/server";
 import { Pool } from "@neondatabase/serverless";
 
 const isClinicianRoute = createRouteMatcher(["/clinician(.*)"]);
 const isAdminRoute = createRouteMatcher(["/admin(.*)"]);
 const isUserRoute = createRouteMatcher(["/dashboard(.*)", "/assessment(.*)", "/results(.*)", "/resources(.*)"]);
-const isPublicRoute = createRouteMatcher(["/", "/about", "/research", "/onboarding", "/login", "/signup", "/api/webhooks(.*)", "/api/assessments(.*)"]);
+const isPublicRoute = createRouteMatcher(["/", "/about", "/research", "/onboarding", `${AUTH_ROUTES.SIGN_IN}(.*)`, `${AUTH_ROUTES.SIGN_UP}(.*)`, "/api/webhooks(.*)", "/api/assessments(.*)"]);
 
 // 60-second in-memory Edge Cache for authorization roles
 const roleCache = new Map<string, { role: string; expires: number }>();
@@ -74,8 +75,13 @@ export default clerkMiddleware(async (auth, req) => {
     return NextResponse.redirect(new URL("/dashboard", req.url));
   }
 
-  if (isUserRoute(req) && userLevel < roleHierarchy["USER"]) {
-    return NextResponse.redirect(new URL("/login", req.url));
+  if (isUserRoute(req)) {
+    if (dbRole.toUpperCase() === "CLINICIAN") {
+      return NextResponse.redirect(new URL("/clinician", req.url));
+    }
+    if (userLevel < roleHierarchy["USER"]) {
+      return NextResponse.redirect(new URL(AUTH_ROUTES.SIGN_IN, req.url));
+    }
   }
 
   return NextResponse.next();

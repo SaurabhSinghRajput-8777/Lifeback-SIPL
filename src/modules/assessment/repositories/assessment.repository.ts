@@ -39,4 +39,32 @@ export class AssessmentRepository {
       where: { assessmentId },
     });
   }
+
+  static async cleanupAllDrafts(templateId: string, excludeAssessmentId: string, userId?: string, anonymousSessionId?: string) {
+    if (!userId && !anonymousSessionId) return;
+    
+    const drafts = await prisma.assessment.findMany({
+      where: {
+        templateId,
+        status: AssessmentStatus.DRAFT,
+        id: { not: excludeAssessmentId },
+        ...(userId ? { userId } : { anonymousSessionId })
+      },
+      select: { id: true }
+    });
+
+    if (drafts.length > 0) {
+      const draftIds = drafts.map(d => d.id);
+      
+      // Delete responses first to satisfy foreign key constraints
+      await prisma.assessmentResponse.deleteMany({
+        where: { assessmentId: { in: draftIds } }
+      });
+
+      // Delete the assessments
+      await prisma.assessment.deleteMany({
+        where: { id: { in: draftIds } }
+      });
+    }
+  }
 }

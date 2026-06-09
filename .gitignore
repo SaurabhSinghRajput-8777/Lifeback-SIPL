@@ -128,3 +128,4 @@ test-*.mjs
 check-*.ts
 check-*.js
 check-*.mjs
+seed-*.ts

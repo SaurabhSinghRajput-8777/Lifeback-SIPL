@@ -101,6 +101,14 @@ export class AssessmentService {
       { templateName, score: result.totalScore, severity: result.severity }
     );
 
+    // Cleanup any old drafts for this user and template now that a new one is completed
+    await AssessmentRepository.cleanupAllDrafts(
+      assessment.templateId,
+      assessment.id,
+      assessment.userId || undefined,
+      assessment.anonymousSessionId || undefined
+    );
+
     return report;
   }
 

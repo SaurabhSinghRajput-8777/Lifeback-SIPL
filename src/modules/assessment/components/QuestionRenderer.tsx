@@ -17,7 +17,7 @@ export function QuestionRenderer({ question, currentValue, onChange }: QuestionR
     
     return (
       <RadioGroup
-        value={valueString}
+        value={valueString || ""}
         onValueChange={(val) => {
           // If option values are numbers, parse them back. 
           // Future-proofing: checking the type of the first option's value.

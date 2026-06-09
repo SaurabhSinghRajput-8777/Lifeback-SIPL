@@ -23,6 +23,12 @@ enum AssessmentStatus {
   CANCELLED
 }
 
+enum AssessmentReviewStatus {
+  PENDING
+  REVIEWED
+  FLAGGED
+}
+
 enum ConsentType {
   PRIVACY_POLICY
   TERMS
@@ -48,6 +54,10 @@ model User {
   consents          UserConsent[]
   assessments       Assessment[]
   anonymousSessions AnonymousSession[]
+  
+  patientNotes        ClinicalNote[] @relation("PatientNotes")
+  clinicianNotes      ClinicalNote[] @relation("ClinicianNotes")
+  reviewedAssessments Assessment[]   @relation("AssessmentReviewer")
 }
 
 model AnonymousSession {
@@ -116,14 +126,19 @@ model Assessment {
   templateId         String           @db.Uuid
   templateSnapshot   Json             @default("{}")
   status             AssessmentStatus @default(DRAFT)
+  reviewStatus       AssessmentReviewStatus @default(PENDING)
+  reviewedAt         DateTime?        @db.Timestamptz
+  reviewedById       String?          @db.Uuid
   createdAt          DateTime         @default(now()) @db.Timestamptz
   updatedAt          DateTime         @updatedAt @db.Timestamptz
 
   user             User?                @relation(fields: [userId], references: [id])
+  reviewer         User?                @relation("AssessmentReviewer", fields: [reviewedById], references: [id])
   anonymousSession AnonymousSession?    @relation(fields: [anonymousSessionId], references: [id])
   template         AssessmentTemplate   @relation(fields: [templateId], references: [id])
   responses        AssessmentResponse[]
   report           AssessmentReport?
+  clinicalNotes    ClinicalNote[]
 }
 
 model AssessmentResponse {
@@ -157,4 +172,23 @@ model AuditLog {
   resourceId String?  @db.Uuid
   metadata   Json     @default("{}")
   createdAt  DateTime @default(now()) @db.Timestamptz
+}
+
+model ClinicalNote {
+  id           String   @id @default(uuid()) @db.Uuid
+
+  patientId    String   @db.Uuid
+  clinicianId  String   @db.Uuid
+
+  assessmentId String?  @db.Uuid
+
+  title        String?  @db.VarChar(200)
+  content      String   @db.Text
+
+  createdAt    DateTime @default(now()) @db.Timestamptz
+  updatedAt    DateTime @updatedAt @db.Timestamptz
+
+  patient      User        @relation("PatientNotes", fields: [patientId], references: [id])
+  clinician    User        @relation("ClinicianNotes", fields: [clinicianId], references: [id])
+  assessment   Assessment? @relation(fields: [assessmentId], references: [id])
 }

@@ -36,8 +36,9 @@ export function AssessmentRenderer({
   const currentValue = responses[currentQuestion?.id];
   const progressPercentage = Math.round((currentIndex / questions.length) * 100);
 
-  const handleNext = async () => {
-    if (currentValue === undefined || currentValue === null) return;
+  const handleNext = async (overrideValue?: unknown) => {
+    const valToSave = overrideValue !== undefined ? overrideValue : currentValue;
+    if (valToSave === undefined || valToSave === null) return;
     
     setIsSaving(true);
     setError(null);
@@ -48,7 +49,7 @@ export function AssessmentRenderer({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           questionId: currentQuestion.id,
-          answer: currentValue,
+          answer: valToSave,
         }),
       });
 
@@ -121,9 +122,15 @@ export function AssessmentRenderer({
           )}
           
           <QuestionRenderer 
+            key={currentQuestion.id}
             question={currentQuestion} 
             currentValue={currentValue}
-            onChange={(val) => setResponses(prev => ({ ...prev, [currentQuestion.id]: val }))}
+            onChange={(val) => {
+              setResponses(prev => ({ ...prev, [currentQuestion.id]: val }));
+              if (!isLastQuestion) {
+                handleNext(val);
+              }
+            }}
           />
         </CardContent>
 
@@ -137,7 +144,7 @@ export function AssessmentRenderer({
             Back
           </Button>
           <Button 
-            onClick={handleNext}
+            onClick={() => handleNext()}
             disabled={currentValue === undefined || currentValue === null || isSaving}
             className="px-8"
           >

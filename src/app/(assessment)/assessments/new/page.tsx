@@ -3,9 +3,13 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
+import { useAuth } from "@clerk/nextjs";
+import { AssessmentHeader } from "@/modules/assessment/components/AssessmentHeader";
 
 export default function NewAssessmentPage() {
   const router = useRouter();
+  const { userId } = useAuth();
+  const exitUrl = userId ? "/dashboard" : "/";
 
   useEffect(() => {
     async function startAssessment() {
@@ -31,11 +35,14 @@ export default function NewAssessmentPage() {
   }, [router]);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[60vh]">
-      <Loader2 className="h-8 w-8 animate-spin text-zinc-500 mb-4" />
-      <h2 className="text-xl font-medium text-zinc-700 dark:text-zinc-300">
-        Preparing your assessment...
-      </h2>
-    </div>
+    <>
+      <AssessmentHeader exitUrl={exitUrl} isCompleted={false} />
+      <div className="flex flex-col items-center justify-center min-h-[60vh]">
+        <Loader2 className="h-8 w-8 animate-spin text-zinc-500 mb-4" />
+        <h2 className="text-xl font-medium text-zinc-700 dark:text-zinc-300">
+          Preparing your assessment...
+        </h2>
+      </div>
+    </>
   );
 }

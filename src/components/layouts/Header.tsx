@@ -2,8 +2,11 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { SignInButton, UserButton, useAuth } from "@clerk/nextjs";
+import Image from "next/image";
+import { UserButton, useAuth } from "@clerk/nextjs";
+import { AUTH_ROUTES } from "@/config/routes";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { cn } from "@/lib/utils";
 
 export function Header() {
@@ -28,39 +31,57 @@ export function Header() {
       )}
     >
       <div className="w-full px-6 md:px-10 lg:px-16 xl:px-20 h-16 sm:h-20 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2 group">
-          <div className="w-8 h-8 rounded-lg bg-zinc-600 dark:bg-zinc-500 flex items-center justify-center text-white font-bold text-xl group-hover:scale-105 transition-transform cursor-pointer">
-            L
-          </div>
+        <Link href={userId ? "/dashboard" : "/"} className="flex items-center gap-2 group">
+          <Image src="/lifeback_logo.png" alt="LifeBack Logo" width={32} height={32} className="object-contain rounded-full group-hover:scale-105 transition-transform cursor-pointer" />
           <span className="font-semibold text-xl tracking-tight text-zinc-900 dark:text-white cursor-pointer">
             LifeBack
           </span>
         </Link>
 
         <nav className="hidden md:flex items-center gap-8">
-          <Link
-            href="#how-it-works"
-            className="text-sm font-medium text-zinc-600 dark:text-zinc-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors cursor-pointer"
-          >
-            How it Works
-          </Link>
-          <Link
-            href="#why-lifeback"
-            className="text-sm font-medium text-zinc-600 dark:text-zinc-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors cursor-pointer"
-          >
-            Why LifeBack
-          </Link>
-          <Link
-            href="/assessments/new"
-            className="text-sm font-medium text-zinc-600 dark:text-zinc-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors cursor-pointer"
-          >
-            Try Assessment
-          </Link>
+          {!isLoaded ? null : userId ? (
+            <>
+              <Link
+                href="/dashboard"
+                className="text-sm font-medium text-zinc-600 dark:text-zinc-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors cursor-pointer"
+              >
+                Dashboard
+              </Link>
+              <Link
+                href="/about"
+                className="text-sm font-medium text-zinc-600 dark:text-zinc-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors cursor-pointer"
+              >
+                About
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link
+                href="/#how-it-works"
+                className="text-sm font-medium text-zinc-600 dark:text-zinc-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors cursor-pointer"
+              >
+                How it Works
+              </Link>
+              <Link
+                href="/#why-lifeback"
+                className="text-sm font-medium text-zinc-600 dark:text-zinc-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors cursor-pointer"
+              >
+                Why LifeBack
+              </Link>
+              <Link
+                href="/assessments/new"
+                className="text-sm font-medium text-zinc-600 dark:text-zinc-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors cursor-pointer"
+              >
+                Try Assessment
+              </Link>
+            </>
+          )}
         </nav>
 
         <div className="flex items-center gap-4">
+          <ThemeToggle />
           {!isLoaded ? null : !userId ? (
-            <SignInButton mode="modal">
+            <Link href={AUTH_ROUTES.SIGN_IN}>
               <Button
                 variant="default"
                 size="sm"
@@ -68,7 +89,7 @@ export function Header() {
               >
                 Sign In
               </Button>
-            </SignInButton>
+            </Link>
           ) : (
             <UserButton />
           )}

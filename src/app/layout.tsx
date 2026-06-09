@@ -24,9 +24,7 @@ const dancingScript = Dancing_Script({
 });
 
 import { ClerkProvider } from "@clerk/nextjs";
-
-import { Header } from "@/components/layouts/Header";
-import { Footer } from "@/components/layouts/Footer";
+import { ThemeProvider } from "@/components/providers/ThemeProvider";
 
 export const metadata: Metadata = {
   title: "LifeBack | Evidence-Based Mental Health Assessment",
@@ -46,9 +44,14 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <body suppressHydrationWarning className="min-h-full flex flex-col font-body bg-background text-foreground">
-          <Header />
-          {children}
-          <Footer />
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+          </ThemeProvider>
         </body>
       </html>
     </ClerkProvider>

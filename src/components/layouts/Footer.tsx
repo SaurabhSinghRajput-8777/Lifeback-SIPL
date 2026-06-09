@@ -1,14 +1,13 @@
 import Link from "next/link";
 import { Activity } from "lucide-react";
+import { auth } from "@clerk/nextjs/server";
 
 const platformLinks = [
   { label: "About", href: "/about" },
   { label: "How It Works", href: "/how-it-works" },
 ];
 
-const assessmentLinks = [
-  { label: "PHQ-9 (Depression)", href: "/assessments/new" },
-];
+
 
 const legalLinks = [
   { label: "Privacy Policy", href: "/privacy" },
@@ -18,7 +17,13 @@ const legalLinks = [
 const disclaimer =
   "This platform is designed to provide standardized self-assessment scoring based on the Patient Health Questionnaire (PHQ-9). It does not constitute a clinical diagnosis and is not a substitute for professional mental health evaluation. All observations are indicative only. Please review these reports with a qualified mental health professional before making any decisions about your care.";
 
-export function Footer() {
+export async function Footer() {
+  const { userId } = await auth();
+
+  const assessmentLinks = userId 
+    ? [{ label: "Dashboard", href: "/dashboard" }, { label: "New Assessment", href: "/assessments/new" }]
+    : [{ label: "PHQ-9 (Depression)", href: "/assessments/new" }];
+
   return (
     <footer className="w-full bg-background border-t border-border">
       <div className="px-6 pb-10 pt-20 md:px-10 lg:px-16 xl:px-20">
@@ -26,7 +31,7 @@ export function Footer() {
           
           {/* Brand Column */}
           <div className="flex flex-col gap-6">
-            <Link href="/" className="flex items-center gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-4 focus-visible:ring-offset-background">
+            <Link href={userId ? "/dashboard" : "/"} className="flex items-center gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-4 focus-visible:ring-offset-background">
               <span className="font-heading text-[22px] font-bold tracking-[0.08em] text-foreground">
                 LifeBack
               </span>

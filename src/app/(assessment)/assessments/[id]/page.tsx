@@ -1,6 +1,7 @@
 import { AssessmentService } from "@/modules/assessment/services/assessment.service";
 import { AssessmentRenderer } from "@/modules/assessment/components/AssessmentRenderer";
 import { AssessmentResults } from "@/modules/assessment/components/AssessmentResults";
+import { AssessmentHeader } from "@/modules/assessment/components/AssessmentHeader";
 import { notFound } from "next/navigation";
 import { AssessmentStatus } from "@prisma/client";
 import { AssessmentTemplateConfig, AssessmentResult } from "@/types/assessment";
@@ -21,12 +22,24 @@ export default async function AssessmentPage({
     notFound();
   }
 
+  const exitUrl = userId ? "/dashboard" : "/";
+
   if (assessment.status === AssessmentStatus.COMPLETED) {
     const report = assessment.report;
     if (!report) {
-      return <div className="p-8 text-center text-red-500">Error: Report missing for completed assessment.</div>;
+      return (
+        <>
+          <AssessmentHeader exitUrl={exitUrl} isCompleted={true} />
+          <div className="p-8 text-center text-red-500">Error: Report missing for completed assessment.</div>
+        </>
+      );
     }
-    return <AssessmentResults result={report.reportJson as unknown as AssessmentResult} isAnonymous={isAnonymous} />;
+    return (
+      <>
+        <AssessmentHeader exitUrl={exitUrl} isCompleted={true} />
+        <AssessmentResults result={report.reportJson as unknown as AssessmentResult} isAnonymous={isAnonymous} />
+      </>
+    );
   }
 
   // Pre-fill answers from backend for state re-hydration
@@ -38,10 +51,13 @@ export default async function AssessmentPage({
   }
 
   return (
-    <AssessmentRenderer 
-      assessmentId={assessment.id} 
-      templateConfig={assessment.templateSnapshot as unknown as AssessmentTemplateConfig}
-      initialResponses={initialResponses}
-    />
+    <>
+      <AssessmentHeader exitUrl={exitUrl} isCompleted={false} />
+      <AssessmentRenderer 
+        assessmentId={assessment.id} 
+        templateConfig={assessment.templateSnapshot as unknown as AssessmentTemplateConfig}
+        initialResponses={initialResponses}
+      />
+    </>
   );
 }

@@ -3,6 +3,8 @@ import { auth } from "@clerk/nextjs/server";
 import { cookies } from "next/headers";
 import { AssessmentService } from "@/modules/assessment/services/assessment.service";
 import { AnonymousSessionService } from "@/modules/auth/services/anonymous-session.service";
+import { prisma } from "@/lib/prisma/client";
+import * as fs from "fs";
 
 export const dynamic = "force-dynamic";
 
@@ -14,7 +16,20 @@ export async function POST(req: Request) {
 
     let dbSessionId: string | undefined = undefined;
 
-    if (!userId) {
+    let internalUserId: string | undefined = undefined;
+
+    if (userId) {
+      // Resolve the internal database UUID from the clerkId
+      const dbUser = await prisma.user.findUnique({
+        where: { clerkId: userId },
+        select: { id: true }
+      });
+      if (dbUser) {
+        internalUserId = dbUser.id;
+      }
+    }
+
+    if (!internalUserId) {
       if (anonymousId) {
         // Look up existing session to get the primary key 'id'
         const session = await AnonymousSessionService.getSessionByAnonymousId(anonymousId);
@@ -37,7 +52,7 @@ export async function POST(req: Request) {
 
     const assessment = await AssessmentService.startAssessment(
       body.templateName,
-      userId || undefined,
+      internalUserId,
       dbSessionId
     );
 
@@ -49,6 +64,10 @@ export async function POST(req: Request) {
     }
     const message = error instanceof Error ? error.message : "Internal Server Error";
     const stack = error instanceof Error ? error.stack : undefined;
+    
+    // Write error to file for debugging
+    fs.writeFileSync("api-error.log", `Error: ${message}\nStack: ${stack}\n`, { flag: 'a' });
+    
     return NextResponse.json({ error: message, stack }, { status: 500 });
   }
 }

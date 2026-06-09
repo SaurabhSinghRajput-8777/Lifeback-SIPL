@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { SignInButton } from "@clerk/nextjs";
+import { CreateAccountButton } from "@/components/auth/CreateAccountButton";
 import { auth } from "@clerk/nextjs/server";
 import {
   ArrowRight,
@@ -60,11 +60,7 @@ export default async function Home() {
                   </Button>
                 </Link>
                 {!userId && (
-                  <SignInButton mode="modal">
-                    <Button size="lg" variant="outline" className="cursor-pointer w-full sm:w-auto h-14 px-8 rounded-none font-heading font-bold text-[15px] border-border bg-transparent text-foreground hover:bg-foreground/5 transition-colors">
-                      Create Account
-                    </Button>
-                  </SignInButton>
+                  <CreateAccountButton />
                 )}
               </div>
             </div>
@@ -195,7 +191,7 @@ export default async function Home() {
         </section>
 
         {/* 4. HOW IT WORKS */}
-        <section className="py-24 md:py-32 px-6 md:px-10 lg:px-16 xl:px-20 bg-[#F9F9F8] border-b border-border overflow-hidden">
+        <section className="py-24 md:py-32 px-6 md:px-10 lg:px-16 xl:px-20 bg-[#F9F9F8] dark:bg-zinc-900/20 border-b border-border overflow-hidden">
           <div className="max-w-[1440px] mx-auto">
             <div className="max-w-3xl mb-20">
               <h2 className="text-[40px] md:text-[48px] leading-tight font-heading font-bold text-foreground mb-6">
@@ -212,7 +208,7 @@ export default async function Home() {
                 { step: "04", title: "Output", desc: "Severity stratification." },
                 { step: "05", title: "Retain", desc: "Optional data storage." }
               ].map((item, idx) => (
-                <div key={idx} className="group relative border-r border-b border-foreground/15 p-8 bg-transparent hover:bg-white transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] hover:z-10 overflow-hidden">
+                <div key={idx} className="group relative border-r border-b border-foreground/15 p-8 bg-transparent hover:bg-white dark:hover:bg-zinc-900/50 transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] hover:z-10 overflow-hidden">
                   <div className="absolute top-0 left-0 w-full h-[2px] bg-brand-secondary transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-500 ease-out" />
 
                   <div className="absolute -bottom-6 -right-2 text-[100px] font-heading font-bold text-foreground/[0.03] group-hover:text-foreground/[0.06] transition-colors duration-500 pointer-events-none select-none">

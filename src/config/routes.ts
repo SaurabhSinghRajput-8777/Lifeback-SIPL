@@ -1,13 +1,14 @@
+export const AUTH_ROUTES = {
+  SIGN_IN: "/sign-in",
+  SIGN_UP: "/sign-up",
+} as const;
+
 export const ROUTES = {
   public: {
     home: "/",
     about: "/about",
     research: "/research",
     onboarding: "/onboarding",
-  },
-  auth: {
-    login: "/login",
-    signup: "/signup",
   },
   user: {
     dashboard: "/dashboard",
