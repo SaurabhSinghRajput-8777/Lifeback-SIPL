@@ -54,9 +54,9 @@ export default async function Home() {
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4">
-                <Link href="/assessments/new">
+                <Link href={userId ? "/dashboard" : "/assessments/new"}>
                   <Button size="lg" className="cursor-pointer w-full sm:w-auto h-14 px-8 rounded-none font-heading font-bold text-[15px] bg-foreground text-background hover:bg-foreground/90 transition-colors">
-                    Take Free Assessment <ArrowRight className="ml-2 h-5 w-5" />
+                    {userId ? "Go  To  Dashboard" : "Take Free Assessment"} <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                 </Link>
                 {!userId && (

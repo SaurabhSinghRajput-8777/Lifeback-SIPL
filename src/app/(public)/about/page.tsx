@@ -2,13 +2,16 @@ import React from "react";
 import Link from "next/link";
 import { ArrowRight, ShieldCheck, BrainCircuit, LineChart } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { auth } from "@clerk/nextjs/server";
 
 export const metadata = {
   title: "About LifeBack | Sequoia Insilico Pvt. Ltd.",
   description: "LifeBack is a clinical assessment orchestration platform built by Sequoia Insilico Pvt. Ltd., specialising in the objective detection of psychiatric conditions.",
 };
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const { userId } = await auth();
+
   return (
     <div className="flex-1 w-full bg-background relative overflow-hidden">
       {/* Abstract Background Elements */}
@@ -114,9 +117,9 @@ export default function AboutPage() {
         <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-10">
           Try the clinical-grade PHQ-9 assessment engine. Zero friction, completely anonymous, no account required to start.
         </p>
-        <Link href="/assessments/new">
+        <Link href={userId ? "/dashboard" : "/assessments/new"}>
           <Button className="h-14 px-8 text-lg bg-foreground text-background hover:bg-foreground/90 cursor-pointer">
-            Take Free Assessment
+            {userId ? "Go To Dashboard" : "Take Free Assessment"}
           </Button>
         </Link>
       </section>
