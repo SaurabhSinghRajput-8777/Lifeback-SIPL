@@ -110,7 +110,7 @@ export default async function Home() {
         </section>
 
         {/* 2. TRUST BAR */}
-        <section className="border-b border-border bg-background py-16 px-6 md:px-10 lg:px-16 xl:px-20">
+        <section className="border-b border-border dark:border-white/5 bg-background dark:bg-[#0B0F19] py-16 px-6 md:px-10 lg:px-16 xl:px-20">
           <div className="max-w-[1440px] mx-auto">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-12">
               {[
@@ -191,7 +191,7 @@ export default async function Home() {
         </section>
 
         {/* 4. HOW IT WORKS */}
-        <section className="py-24 md:py-32 px-6 md:px-10 lg:px-16 xl:px-20 bg-[#F9F9F8] dark:bg-zinc-900/20 border-b border-border overflow-hidden">
+        <section className="py-24 md:py-32 px-6 md:px-10 lg:px-16 xl:px-20 bg-[#F9F9F8] dark:bg-[#0B0F19] border-b border-border dark:border-white/5 overflow-hidden">
           <div className="max-w-[1440px] mx-auto">
             <div className="max-w-3xl mb-20">
               <h2 className="text-[40px] md:text-[48px] leading-tight font-heading font-bold text-foreground mb-6">

@@ -10,7 +10,7 @@ export function PlatformFooter() {
   const role = (user?.unsafeMetadata?.role as string) || ROLES.USER;
 
   return (
-    <footer className="w-full border-t border-border bg-card py-8 px-4 sm:px-8 mt-auto shrink-0">
+    <footer className="w-full border-t border-border dark:border-white/5 bg-card dark:bg-[#0B0F19] py-8 px-4 sm:px-8 mt-auto shrink-0">
       <div className="max-w-6xl mx-auto flex flex-col gap-8">
         
         {/* Top Section: Links & Support */}

@@ -17,43 +17,51 @@ export default async function ClinicianDashboardPage() {
 
       {/* Clinician Overview Cards */}
       <section className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
-        <div className="p-4 sm:p-6 lg:p-8 rounded-xl border border-border/80 bg-card shadow-sm hover:border-clinical-interactive/30 hover:shadow-md transition-all duration-300">
-          <div className="flex items-center justify-between border-b border-border/40 pb-3 sm:pb-4 mb-3 sm:mb-4">
-            <span className="text-xs sm:text-sm font-medium text-muted-foreground">Total Patients</span>
-            <Users className="w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground" />
+        <div className="p-4 sm:p-6 lg:p-8 rounded-xl border border-white/60 dark:border-white/10 bg-white/60 dark:bg-slate-900/60 backdrop-blur-md shadow-sm hover:shadow-indigo-500/10 hover:border-indigo-200 dark:hover:border-indigo-800 transition-all duration-300">
+          <div className="flex items-center justify-between border-b border-indigo-100 dark:border-indigo-900/30 pb-3 sm:pb-4 mb-3 sm:mb-4">
+            <span className="text-xs sm:text-sm font-medium text-indigo-900/70 dark:text-indigo-200">Total Patients</span>
+            <div className="p-2 bg-indigo-50 dark:bg-indigo-500/10 rounded-lg">
+              <Users className="w-4 h-4 sm:w-5 sm:h-5 text-indigo-600 dark:text-indigo-400" />
+            </div>
           </div>
           <div className="text-2xl sm:text-3xl font-heading font-bold text-foreground">
             {overview.totalPatients}
           </div>
         </div>
 
-        <div className="p-4 sm:p-6 lg:p-8 rounded-xl border border-border/80 bg-card shadow-sm hover:border-clinical-interactive/30 hover:shadow-md transition-all duration-300">
-          <div className="flex items-center justify-between border-b border-border/40 pb-3 sm:pb-4 mb-3 sm:mb-4">
-            <span className="text-xs sm:text-sm font-medium text-muted-foreground">Pending Review</span>
-            <FileSearch className="w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground" />
+        <div className="p-4 sm:p-6 lg:p-8 rounded-xl border border-white/60 dark:border-white/10 bg-white/60 dark:bg-slate-900/60 backdrop-blur-md shadow-sm hover:shadow-orange-500/10 hover:border-orange-200 dark:hover:border-orange-800 transition-all duration-300">
+          <div className="flex items-center justify-between border-b border-orange-100 dark:border-orange-900/30 pb-3 sm:pb-4 mb-3 sm:mb-4">
+            <span className="text-xs sm:text-sm font-medium text-orange-900/70 dark:text-orange-200">Pending Review</span>
+            <div className="p-2 bg-orange-50 dark:bg-orange-500/10 rounded-lg">
+              <FileSearch className="w-4 h-4 sm:w-5 sm:h-5 text-orange-600 dark:text-orange-400" />
+            </div>
           </div>
           <div className="text-2xl sm:text-3xl font-heading font-bold text-foreground">
             {overview.pendingReview}
           </div>
         </div>
 
-        <div className="p-4 sm:p-6 lg:p-8 rounded-xl border border-border/80 bg-card shadow-sm hover:border-clinical-interactive/30 hover:shadow-md transition-all duration-300">
-          <div className="flex items-center justify-between border-b border-border/40 pb-3 sm:pb-4 mb-3 sm:mb-4">
-            <span className="text-xs sm:text-sm font-medium text-muted-foreground">Reviewed</span>
-            <FileCheck className="w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground" />
+        <div className="p-4 sm:p-6 lg:p-8 rounded-xl border border-white/60 dark:border-white/10 bg-white/60 dark:bg-slate-900/60 backdrop-blur-md shadow-sm hover:shadow-green-500/10 hover:border-green-200 dark:hover:border-green-800 transition-all duration-300">
+          <div className="flex items-center justify-between border-b border-green-100 dark:border-green-900/30 pb-3 sm:pb-4 mb-3 sm:mb-4">
+            <span className="text-xs sm:text-sm font-medium text-green-900/70 dark:text-green-200">Reviewed</span>
+            <div className="p-2 bg-green-50 dark:bg-green-500/10 rounded-lg">
+              <FileCheck className="w-4 h-4 sm:w-5 sm:h-5 text-green-600 dark:text-green-400" />
+            </div>
           </div>
           <div className="text-2xl sm:text-3xl font-heading font-bold text-foreground">
             {overview.reviewed}
           </div>
         </div>
 
-        <div className="p-4 sm:p-6 lg:p-8 rounded-xl border border-red-500/30 shadow-sm bg-red-500/5 hover:bg-red-500/10 transition-colors relative overflow-hidden">
+        <div className="p-4 sm:p-6 lg:p-8 rounded-xl border border-red-200 dark:border-red-500/30 shadow-sm bg-red-50/80 dark:bg-red-900/20 backdrop-blur-md hover:bg-red-100/80 dark:hover:bg-red-900/30 hover:shadow-red-500/10 transition-all duration-300 relative overflow-hidden">
           <div className="absolute top-0 right-0 p-4 opacity-10">
             <AlertTriangle className="w-12 h-12 sm:w-16 sm:h-16 text-red-500" />
           </div>
-          <div className="flex items-center justify-between border-b border-red-500/20 pb-3 sm:pb-4 mb-3 sm:mb-4 relative z-10">
-            <span className="text-xs sm:text-sm font-medium text-red-500">High Risk</span>
-            <AlertTriangle className="w-4 h-4 sm:w-5 sm:h-5 text-red-500" />
+          <div className="flex items-center justify-between border-b border-red-200 dark:border-red-500/20 pb-3 sm:pb-4 mb-3 sm:mb-4 relative z-10">
+            <span className="text-xs sm:text-sm font-medium text-red-600 dark:text-red-400">High Risk</span>
+            <div className="p-2 bg-red-100 dark:bg-red-500/20 rounded-lg">
+              <AlertTriangle className="w-4 h-4 sm:w-5 sm:h-5 text-red-500" />
+            </div>
           </div>
           <div className="text-2xl sm:text-3xl font-heading font-bold text-foreground relative z-10">
             {overview.highRisk}
@@ -93,9 +101,9 @@ export default async function ClinicianDashboardPage() {
             ))}
 
             {queue.length === 0 && (
-              <div className="p-8 rounded-xl border border-border/80 shadow-sm bg-card text-center">
-                <AlertTriangle className="w-8 h-8 text-muted-foreground mx-auto mb-3 opacity-50" />
-                <p className="text-sm text-muted-foreground">No high-risk patients currently in queue.</p>
+              <div className="p-8 rounded-xl border border-white/60 dark:border-white/10 bg-white/60 dark:bg-slate-900/60 backdrop-blur-md shadow-sm text-center">
+                <AlertTriangle className="w-8 h-8 text-indigo-300 dark:text-indigo-700 mx-auto mb-3 opacity-50" />
+                <p className="text-sm text-indigo-900/60 dark:text-indigo-200/60">No high-risk patients currently in queue.</p>
               </div>
             )}
           </div>
@@ -105,11 +113,11 @@ export default async function ClinicianDashboardPage() {
         <section className="lg:col-span-2 space-y-4 min-w-0">
           <h3 className="text-lg font-heading font-semibold text-foreground">Patient Roster</h3>
 
-          <div className="rounded-xl border border-border/80 shadow-sm bg-card overflow-hidden">
+          <div className="rounded-xl border border-white/60 dark:border-white/10 bg-white/60 dark:bg-slate-900/60 backdrop-blur-md shadow-sm overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="border-b border-border/40 bg-muted/40 text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                  <tr className="border-b border-indigo-100 dark:border-indigo-900/30 text-xs font-bold text-indigo-900/60 dark:text-indigo-200/60 uppercase tracking-wider bg-indigo-50/50 dark:bg-indigo-900/10">
                     <th className="p-4">Patient</th>
                     <th className="p-4">Latest Score</th>
                     <th className="p-4">Severity</th>
@@ -118,9 +126,9 @@ export default async function ClinicianDashboardPage() {
                     <th className="p-4 text-right">Action</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-border/80">
+                <tbody className="divide-y divide-indigo-50 dark:divide-indigo-900/20">
                   {patients.map((p) => (
-                    <tr key={p.id} className="hover:bg-muted/30 transition-colors group">
+                    <tr key={p.id} className="hover:bg-white/60 dark:hover:bg-slate-800/60 transition-colors group">
                       <td className="p-4 text-sm font-medium text-foreground">
                         <div className="flex items-center gap-3">
                           <div className="w-8 h-8 rounded-full bg-clinical-soft flex items-center justify-center text-clinical-primary font-semibold text-xs">

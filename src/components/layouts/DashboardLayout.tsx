@@ -57,9 +57,10 @@ export function DashboardLayout({ children, userRole, userName }: DashboardLayou
   return (
     <div className="h-screen overflow-hidden bg-background flex flex-col md:flex-row font-body text-foreground">
       {/* Mobile Header */}
-      <div className="md:hidden flex items-center justify-between p-4 border-b border-border bg-card">
+      <div className="md:hidden flex items-center justify-between p-4 border-b border-border dark:border-white/5 bg-card dark:bg-[#0B0F19]">
         <Link href="/" className="flex items-center gap-2">
-          <Image src="/lifeback_logo.png" alt="LifeBack Logo" width={32} height={32} className="object-contain rounded-full" />
+          <Image src="/lifeback_logo.png" alt="LifeBack Logo" width={32} height={32} className="object-contain rounded-full dark:hidden" />
+          <Image src="/lifeback_logo_white.png" alt="LifeBack Logo" width={32} height={32} className="object-contain rounded-full hidden dark:block" />
           <span className="font-semibold text-xl tracking-tight text-foreground">LifeBack</span>
         </Link>
         <div className="flex items-center gap-4">
@@ -76,7 +77,7 @@ export function DashboardLayout({ children, userRole, userName }: DashboardLayou
 
       {/* Sidebar */}
       <div className={cn(
-        "fixed inset-y-0 left-0 z-50 bg-sidebar border-r border-border shadow-[1px_0_10px_rgba(0,0,0,0.02)] transform transition-all duration-300 ease-in-out md:translate-x-0 md:static md:flex md:flex-col",
+        "fixed inset-y-0 left-0 z-50 bg-sidebar dark:bg-[#0B0F19] border-r border-border dark:border-white/5 shadow-[1px_0_10px_rgba(0,0,0,0.02)] transform transition-all duration-300 ease-in-out md:translate-x-0 md:static md:flex md:flex-col",
         isDesktopMenuCollapsed ? "w-20" : "w-64",
         isMobileMenuOpen ? "translate-x-0 w-64" : "-translate-x-full"
       )}>
@@ -86,7 +87,8 @@ export function DashboardLayout({ children, userRole, userName }: DashboardLayou
         )}>
           {!isDesktopMenuCollapsed && (
             <Link href="/" className="flex items-center gap-2 group overflow-hidden">
-              <Image src="/lifeback_logo.png" alt="LifeBack Logo" width={32} height={32} className="object-contain rounded-full group-hover:scale-105 transition-transform" />
+              <Image src="/lifeback_logo.png" alt="LifeBack Logo" width={32} height={32} className="object-contain rounded-full group-hover:scale-105 transition-transform dark:hidden" />
+              <Image src="/lifeback_logo_white.png" alt="LifeBack Logo" width={32} height={32} className="object-contain rounded-full group-hover:scale-105 transition-transform hidden dark:block" />
               <span className="font-semibold text-xl tracking-tight text-foreground whitespace-nowrap">LifeBack</span>
             </Link>
           )}
@@ -112,13 +114,13 @@ export function DashboardLayout({ children, userRole, userName }: DashboardLayou
                   isDesktopMenuCollapsed && !isMobileMenuOpen ? "justify-center px-0" : "px-3",
                   isActive 
                     ? "bg-clinical-soft/40 text-clinical-primary border border-clinical-primary/50 shadow-sm dark:bg-clinical-primary/10" 
-                    : "text-muted-foreground hover:bg-muted hover:text-foreground border border-transparent"
+                    : "text-slate-700 dark:text-slate-300 hover:bg-muted hover:text-foreground border border-transparent"
                 )}
                 title={isDesktopMenuCollapsed ? item.name : undefined}
               >
-                <item.icon className={cn("min-w-5 min-h-5 w-5 h-5", isActive ? "text-clinical-primary" : "text-muted-foreground")} />
+                <item.icon className={cn("min-w-5 min-h-5 w-5 h-5", isActive ? "text-clinical-primary" : "text-slate-500 dark:text-slate-400")} />
                 {(!isDesktopMenuCollapsed || isMobileMenuOpen) && (
-                  <span className={cn("whitespace-nowrap", isActive ? "font-semibold" : "")}>{item.name === 'Dashboard' ? 'Dashboard (Blue)' : item.name}</span>
+                  <span className={cn("whitespace-nowrap", isActive ? "font-semibold" : "")}>{item.name}</span>
                 )}
               </Link>
             );
@@ -149,8 +151,8 @@ export function DashboardLayout({ children, userRole, userName }: DashboardLayou
       )}
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
-        <header className="hidden md:flex h-20 items-center justify-between px-8 border-b border-border bg-card">
+      <div className="flex-1 flex flex-col min-h-0 overflow-hidden relative">
+        <header className="hidden md:flex h-20 items-center justify-between px-8 border-b border-border/40 dark:border-white/5 bg-white/60 dark:bg-[#0B0F19]/80 backdrop-blur-xl z-10 sticky top-0">
           <div>
             <h1 className="text-2xl font-heading font-bold text-foreground">
               Welcome back{userName ? `, ${userName}` : ""}
@@ -165,8 +167,10 @@ export function DashboardLayout({ children, userRole, userName }: DashboardLayou
           </div>
         </header>
 
-        <div className="flex-1 overflow-y-auto bg-background flex flex-col">
-          <main className="flex-1 p-4 sm:p-8 flex flex-col">
+        <div className="flex-1 overflow-y-auto bg-slate-50 dark:bg-gradient-to-br dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 flex flex-col relative z-0">
+          {/* Premium Two-Tone Background */}
+          <div className="absolute inset-x-0 top-0 h-[500px] bg-gradient-to-b from-indigo-50/80 via-indigo-50/20 to-transparent dark:hidden -z-10" />
+          <main className="flex-1 p-4 sm:p-8 flex flex-col relative z-10">
             <div className="max-w-6xl mx-auto w-full flex-1">
               {/* Mobile Welcome Header */}
               <div className="md:hidden mb-6">

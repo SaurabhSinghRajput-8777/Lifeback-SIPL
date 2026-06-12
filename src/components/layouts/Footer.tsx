@@ -25,7 +25,7 @@ export async function Footer() {
     : [{ label: "PHQ-9 (Depression)", href: "/assessments/new" }];
 
   return (
-    <footer className="w-full bg-background border-t border-border">
+    <footer className="w-full bg-background dark:bg-[#0B0F19] border-t border-border dark:border-white/5">
       <div className="px-6 pb-10 pt-20 md:px-10 lg:px-16 xl:px-20">
         <div className="grid gap-14 lg:grid-cols-[1fr_1fr_0.8fr_1.2fr] lg:items-start">
 

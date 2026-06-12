@@ -37,40 +37,48 @@ export default async function DashboardPage() {
 
       {/* Overview Cards */}
       <section className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
-        <div className="p-4 sm:p-6 lg:p-8 rounded-xl border border-border/80 bg-card shadow-sm hover:border-clinical-interactive/30 hover:shadow-md transition-all duration-300">
-          <div className="flex items-center justify-between border-b border-border/40 pb-3 sm:pb-4 mb-3 sm:mb-4">
-            <span className="text-xs sm:text-sm font-medium text-muted-foreground">Latest Score</span>
-            <Activity className="w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground" />
+        <div className="p-4 sm:p-6 lg:p-8 rounded-xl border border-white/60 dark:border-white/10 bg-white/60 dark:bg-slate-900/60 backdrop-blur-md shadow-sm hover:shadow-indigo-500/10 hover:border-indigo-200 dark:hover:border-indigo-800 transition-all duration-300">
+          <div className="flex items-center justify-between border-b border-indigo-100 dark:border-indigo-900/30 pb-3 sm:pb-4 mb-3 sm:mb-4">
+            <span className="text-xs sm:text-sm font-medium text-indigo-900/70 dark:text-indigo-200">Latest Score</span>
+            <div className="p-2 bg-indigo-50 dark:bg-indigo-500/10 rounded-lg">
+              <Activity className="w-4 h-4 sm:w-5 sm:h-5 text-indigo-600 dark:text-indigo-400" />
+            </div>
           </div>
           <div className="text-2xl sm:text-3xl font-heading font-bold text-foreground">
             {overview.latestScore !== null ? overview.latestScore : "--"}
           </div>
         </div>
 
-        <div className="p-4 sm:p-6 lg:p-8 rounded-xl border border-border/80 bg-card shadow-sm hover:border-clinical-interactive/30 hover:shadow-md transition-all duration-300">
-          <div className="flex items-center justify-between border-b border-border/40 pb-3 sm:pb-4 mb-3 sm:mb-4">
-            <span className="text-xs sm:text-sm font-medium text-muted-foreground">Severity</span>
-            <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5 text-orange-500" />
+        <div className="p-4 sm:p-6 lg:p-8 rounded-xl border border-white/60 dark:border-white/10 bg-white/60 dark:bg-slate-900/60 backdrop-blur-md shadow-sm hover:shadow-orange-500/10 hover:border-orange-200 dark:hover:border-orange-800 transition-all duration-300">
+          <div className="flex items-center justify-between border-b border-orange-100 dark:border-orange-900/30 pb-3 sm:pb-4 mb-3 sm:mb-4">
+            <span className="text-xs sm:text-sm font-medium text-orange-900/70 dark:text-orange-200">Severity</span>
+            <div className="p-2 bg-orange-50 dark:bg-orange-500/10 rounded-lg">
+              <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5 text-orange-600 dark:text-orange-400" />
+            </div>
           </div>
           <div className="text-lg sm:text-xl font-heading font-bold text-foreground truncate">
             {overview.currentSeverity}
           </div>
         </div>
 
-        <div className="p-4 sm:p-6 lg:p-8 rounded-xl border border-border/80 bg-card shadow-sm hover:border-clinical-interactive/30 hover:shadow-md transition-all duration-300">
-          <div className="flex items-center justify-between border-b border-border/40 pb-3 sm:pb-4 mb-3 sm:mb-4">
-            <span className="text-xs sm:text-sm font-medium text-muted-foreground">Completed</span>
-            <ClipboardList className="w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground" />
+        <div className="p-4 sm:p-6 lg:p-8 rounded-xl border border-white/60 dark:border-white/10 bg-white/60 dark:bg-slate-900/60 backdrop-blur-md shadow-sm hover:shadow-green-500/10 hover:border-green-200 dark:hover:border-green-800 transition-all duration-300">
+          <div className="flex items-center justify-between border-b border-green-100 dark:border-green-900/30 pb-3 sm:pb-4 mb-3 sm:mb-4">
+            <span className="text-xs sm:text-sm font-medium text-green-900/70 dark:text-green-200">Completed</span>
+            <div className="p-2 bg-green-50 dark:bg-green-500/10 rounded-lg">
+              <ClipboardList className="w-4 h-4 sm:w-5 sm:h-5 text-green-600 dark:text-green-400" />
+            </div>
           </div>
           <div className="text-2xl sm:text-3xl font-heading font-bold text-foreground">
             {overview.completedCount}
           </div>
         </div>
 
-        <div className="p-4 sm:p-6 lg:p-8 rounded-xl border border-border/80 bg-card shadow-sm hover:border-clinical-interactive/30 hover:shadow-md transition-all duration-300">
-          <div className="flex items-center justify-between border-b border-border/40 pb-3 sm:pb-4 mb-3 sm:mb-4">
-            <span className="text-xs sm:text-sm font-medium text-muted-foreground">In Progress</span>
-            <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-clinical-primary" />
+        <div className="p-4 sm:p-6 lg:p-8 rounded-xl border border-white/60 dark:border-white/10 bg-white/60 dark:bg-slate-900/60 backdrop-blur-md shadow-sm hover:shadow-purple-500/10 hover:border-purple-200 dark:hover:border-purple-800 transition-all duration-300">
+          <div className="flex items-center justify-between border-b border-purple-100 dark:border-purple-900/30 pb-3 sm:pb-4 mb-3 sm:mb-4">
+            <span className="text-xs sm:text-sm font-medium text-purple-900/70 dark:text-purple-200">In Progress</span>
+            <div className="p-2 bg-purple-50 dark:bg-purple-500/10 rounded-lg">
+              <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-purple-600 dark:text-purple-400" />
+            </div>
           </div>
           <div className="text-2xl sm:text-3xl font-heading font-bold text-foreground">
             {overview.inProgressCount}
@@ -83,33 +91,38 @@ export default async function DashboardPage() {
 
         {/* Quick Actions */}
         <section className="lg:col-span-1 space-y-4 min-w-0">
-          <h3 className="text-lg font-heading font-semibold text-foreground">Action Center (Blue Theme)</h3>
+          <h3 className="text-lg font-heading font-semibold text-foreground">Action Center</h3>
 
           <div className="space-y-3">
             <Link
               href="/dashboard/assessments"
-              className="flex items-center gap-3 w-full p-5 rounded-xl border border-border/80 bg-card shadow-sm hover:border-clinical-interactive/30 hover:shadow-md transition-all duration-300 text-foreground"
+              className="flex items-center gap-3 w-full p-4 rounded-xl border border-white/60 dark:border-white/10 bg-white/60 dark:bg-slate-900/60 backdrop-blur-md shadow-sm hover:shadow-indigo-500/10 hover:border-indigo-200 dark:hover:border-indigo-800 transition-all duration-300 text-foreground group"
             >
-              <Activity className="w-5 h-5 text-clinical-primary" />
-              <span className="font-medium">Take New Assessment</span>
+              <div className="p-2 bg-white dark:bg-slate-900 rounded-lg shadow-sm group-hover:scale-105 transition-transform">
+                <Activity className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+              </div>
+              <span className="font-semibold tracking-tight">Take New Assessment</span>
             </Link>
             <Link
               href="/dashboard/history"
-              className="flex items-center gap-3 w-full p-5 rounded-xl border border-border/80 bg-card shadow-sm hover:border-clinical-interactive/30 hover:shadow-md transition-all duration-300 text-foreground"
+              className="flex items-center gap-3 w-full p-4 rounded-xl border border-white/60 dark:border-white/10 bg-white/60 dark:bg-slate-900/60 backdrop-blur-md shadow-sm hover:shadow-purple-500/10 hover:border-purple-200 dark:hover:border-purple-800 transition-all duration-300 text-foreground group"
             >
-              <History className="w-5 h-5 text-clinical-interactive" />
-              <span className="font-medium">View History</span>
+              <div className="p-2 bg-white dark:bg-slate-900 rounded-lg shadow-sm group-hover:scale-105 transition-transform">
+                <History className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+              </div>
+              <span className="font-semibold tracking-tight">View History</span>
             </Link>
           </div>
 
-          <div className="mt-6 p-6 rounded-xl border border-clinical-soft/50 bg-clinical-soft/30 dark:bg-clinical-primary/10 shadow-sm">
-            <h4 className="text-sm font-medium text-clinical-navy dark:text-clinical-soft mb-4 flex items-center gap-2">
-              <TrendingUp className="w-4 h-4 text-clinical-primary" /> Insights (Preview)
+          <div className="mt-6 p-6 rounded-xl border border-white/60 dark:border-white/10 bg-white/70 dark:bg-slate-900/70 backdrop-blur-md relative overflow-hidden group hover:shadow-lg hover:shadow-indigo-500/5 transition-all duration-500">
+            <div className="absolute inset-0 bg-gradient-to-br from-indigo-400/10 via-purple-400/5 to-transparent opacity-50 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <h4 className="text-sm font-semibold text-indigo-900 dark:text-indigo-200 mb-4 flex items-center gap-2 relative z-10">
+              <TrendingUp className="w-4 h-4 text-indigo-500" /> Insights (Preview)
             </h4>
-            <p className="text-sm text-foreground/80 leading-relaxed">
+            <p className="text-sm text-foreground/80 leading-relaxed relative z-10">
               {insights.progressSummary}
             </p>
-            <div className="mt-4 text-xs font-mono text-muted-foreground">Consistency: {insights.consistency}</div>
+            <div className="mt-4 text-xs font-mono font-medium text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-500/10 inline-block px-2 py-1 rounded relative z-10">Consistency: {insights.consistency}</div>
           </div>
         </section>
 
@@ -120,20 +133,20 @@ export default async function DashboardPage() {
             <Link href="/dashboard/history" className="text-sm text-clinical-interactive hover:text-clinical-primary font-medium">View All</Link>
           </div>
 
-          <div className="rounded-xl border border-border/80 shadow-sm bg-card overflow-hidden">
+          <div className="rounded-xl border border-indigo-100 dark:border-white/10 bg-white/70 dark:bg-slate-900/70 backdrop-blur-md shadow-sm overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="border-b border-border/40 bg-muted/40 text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                  <tr className="border-b border-indigo-100 dark:border-indigo-900/30 text-xs font-bold text-indigo-900/60 dark:text-indigo-200/60 uppercase tracking-wider bg-indigo-50/50 dark:bg-indigo-900/10">
                     <th className="p-4">Type</th>
                     <th className="p-4">Date</th>
                     <th className="p-4">Status</th>
                     <th className="p-4">Score</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-border/80">
+                <tbody className="divide-y divide-indigo-50 dark:divide-indigo-900/20">
                   {recent.map((item) => (
-                    <tr key={item.id} className="group hover:bg-muted/30 transition-colors">
+                    <tr key={item.id} className="group hover:bg-white/60 dark:hover:bg-slate-800/60 transition-colors">
                       <td className="p-4 text-sm font-medium text-foreground">{item.name}</td>
                       <td className="p-4 text-sm text-muted-foreground">
                         {item.date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
