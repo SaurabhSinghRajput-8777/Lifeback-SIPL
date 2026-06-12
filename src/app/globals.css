@@ -4,9 +4,15 @@
 
 @custom-variant dark (&:is(.dark *));
 
-@theme inline {
+@theme {
   --color-brand-primary: #121214;
   --color-brand-secondary: #849D8E;
+  --color-clinical-primary: #023E8A;
+  --color-clinical-secondary: #0077B6;
+  --color-clinical-interactive: #0096C7;
+  --color-clinical-focus: #00B4D8;
+  --color-clinical-soft: #CAF0F8;
+  --color-clinical-navy: #03045E;
   --color-brand-accent: #E8EBE9;
   --color-brand-dark: #0A0A0B;
   --color-background: var(--background);
@@ -54,9 +60,9 @@
 }
 
 :root {
-  --background: oklch(1 0 0);
+  --background: #F7F8FA;
   --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
+  --card: #FFFFFF;
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
@@ -78,7 +84,7 @@
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
   --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
+  --sidebar: #FCFCFD;
   --sidebar-foreground: oklch(0.145 0 0);
   --sidebar-primary: oklch(0.205 0 0);
   --sidebar-primary-foreground: oklch(0.985 0 0);

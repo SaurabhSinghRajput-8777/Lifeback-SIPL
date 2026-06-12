@@ -13,7 +13,7 @@ export default async function HistoryPage() {
   const allAssessments = await DashboardService.getRecentAssessments(clerkUser.id);
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-500">
+    <div className="space-y-10 animate-in fade-in duration-500">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h2 className="text-2xl font-heading font-bold text-foreground mb-2">Assessment History</h2>
@@ -24,15 +24,15 @@ export default async function HistoryPage() {
         
         <Link 
           href="/dashboard/assessments" 
-          className="inline-flex h-10 items-center justify-center rounded-md bg-secondary text-secondary-foreground px-6 text-sm font-medium transition-colors hover:bg-secondary/80"
+          className="inline-flex h-10 items-center justify-center rounded-md bg-primary text-primary-foreground px-6 text-sm font-medium transition-colors hover:bg-primary/90"
         >
           Take New Assessment
         </Link>
       </div>
 
-      <div className="rounded-xl border border-border bg-card overflow-hidden">
+      <div className="rounded-xl border border-border/80 shadow-sm bg-card overflow-hidden">
         {/* Table Toolbar / Controls (Placeholder for future functionality) */}
-        <div className="p-4 border-b border-border flex items-center justify-between bg-muted/30">
+        <div className="p-4 border-b border-border/40 flex items-center justify-between bg-muted/20">
           <div className="flex items-center gap-2 text-muted-foreground text-sm">
             <HistoryIcon className="w-4 h-4" />
             <span>{allAssessments.length} Record{allAssessments.length !== 1 ? 's' : ''} Found</span>
@@ -49,7 +49,7 @@ export default async function HistoryPage() {
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-b border-border bg-muted/50 text-xs font-medium text-muted-foreground uppercase tracking-wider">
+              <tr className="border-b border-border/40 bg-muted/40 text-xs font-medium text-muted-foreground uppercase tracking-wider">
                 <th className="p-4">Assessment Name</th>
                 <th className="p-4">Date Taken</th>
                 <th className="p-4">Status</th>
@@ -57,9 +57,9 @@ export default async function HistoryPage() {
                 <th className="p-4 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-border">
+            <tbody className="divide-y divide-border/80">
               {allAssessments.map((item) => (
-                <tr key={item.id} className="hover:bg-muted/50 transition-colors">
+                <tr key={item.id} className="group hover:bg-muted/30 transition-colors">
                   <td className="p-4 text-sm font-medium text-foreground">{item.name}</td>
                   <td className="p-4 text-sm text-muted-foreground">
                     {item.date.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric", hour: "numeric", minute: "2-digit" })}
@@ -67,8 +67,8 @@ export default async function HistoryPage() {
                   <td className="p-4 text-sm">
                     <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
                       item.status === "COMPLETED" ? "bg-brand-secondary/20 text-brand-secondary" :
-                      item.status === "IN_PROGRESS" ? "bg-purple-500/20 text-purple-600 dark:text-purple-400" :
-                      "bg-muted-foreground/20 text-muted-foreground"
+                      item.status === "IN_PROGRESS" ? "bg-brand-violet/20 text-brand-violet" :
+                      "bg-muted/50 text-muted-foreground border border-border"
                     }`}>
                       {item.status.replace("_", " ")}
                     </span>
@@ -79,7 +79,7 @@ export default async function HistoryPage() {
                   <td className="p-4 text-sm text-right">
                     <Link 
                       href={`/assessments/${item.id}`} 
-                      className="text-brand-secondary hover:text-brand-secondary/80 font-medium transition-colors"
+                      className="text-brand-violet hover:text-brand-violet/80 font-medium transition-colors opacity-0 group-hover:opacity-100"
                     >
                       {item.status === "COMPLETED" ? "View Report" : "Continue"}
                     </Link>

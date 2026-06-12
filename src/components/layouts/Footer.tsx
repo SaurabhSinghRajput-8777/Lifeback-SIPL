@@ -20,7 +20,7 @@ const disclaimer =
 export async function Footer() {
   const { userId } = await auth();
 
-  const assessmentLinks = userId 
+  const assessmentLinks = userId
     ? [{ label: "Dashboard", href: "/dashboard" }, { label: "New Assessment", href: "/assessments/new" }]
     : [{ label: "PHQ-9 (Depression)", href: "/assessments/new" }];
 
@@ -28,7 +28,7 @@ export async function Footer() {
     <footer className="w-full bg-background border-t border-border">
       <div className="px-6 pb-10 pt-20 md:px-10 lg:px-16 xl:px-20">
         <div className="grid gap-14 lg:grid-cols-[1fr_1fr_0.8fr_1.2fr] lg:items-start">
-          
+
           {/* Brand Column */}
           <div className="flex flex-col gap-6">
             <Link href={userId ? "/dashboard" : "/"} className="flex items-center gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-4 focus-visible:ring-offset-background">
@@ -52,7 +52,7 @@ export async function Footer() {
           </p>
 
           <p className="mt-8 font-mono text-[12px] uppercase tracking-[0.14em] text-foreground/60">
-            © 2026 LifeBack. All rights reserved.
+            © 2026 LifeBack by Sequoia Insilico Pvt. Ltd.  All rights reserved.
           </p>
         </div>
       </div>

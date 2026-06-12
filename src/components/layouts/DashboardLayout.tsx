@@ -22,6 +22,7 @@ import {
 import { cn } from "@/lib/utils";
 import { ROLES } from "@/config/roles";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { PlatformFooter } from "@/components/shared/platform-footer";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -54,7 +55,7 @@ export function DashboardLayout({ children, userRole, userName }: DashboardLayou
   const navigation = isClinician ? clinicianNavigation : userNavigation;
 
   return (
-    <div className="min-h-screen bg-background flex flex-col md:flex-row font-body text-foreground">
+    <div className="h-screen overflow-hidden bg-background flex flex-col md:flex-row font-body text-foreground">
       {/* Mobile Header */}
       <div className="md:hidden flex items-center justify-between p-4 border-b border-border bg-card">
         <Link href="/" className="flex items-center gap-2">
@@ -75,7 +76,7 @@ export function DashboardLayout({ children, userRole, userName }: DashboardLayou
 
       {/* Sidebar */}
       <div className={cn(
-        "fixed inset-y-0 left-0 z-50 bg-card border-r border-border transform transition-all duration-300 ease-in-out md:translate-x-0 md:static md:flex md:flex-col",
+        "fixed inset-y-0 left-0 z-50 bg-sidebar border-r border-border shadow-[1px_0_10px_rgba(0,0,0,0.02)] transform transition-all duration-300 ease-in-out md:translate-x-0 md:static md:flex md:flex-col",
         isDesktopMenuCollapsed ? "w-20" : "w-64",
         isMobileMenuOpen ? "translate-x-0 w-64" : "-translate-x-full"
       )}>
@@ -110,14 +111,14 @@ export function DashboardLayout({ children, userRole, userName }: DashboardLayou
                   "flex items-center gap-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
                   isDesktopMenuCollapsed && !isMobileMenuOpen ? "justify-center px-0" : "px-3",
                   isActive 
-                    ? "bg-secondary text-secondary-foreground" 
-                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                    ? "bg-clinical-soft/40 text-clinical-primary border border-clinical-primary/50 shadow-sm dark:bg-clinical-primary/10" 
+                    : "text-muted-foreground hover:bg-muted hover:text-foreground border border-transparent"
                 )}
                 title={isDesktopMenuCollapsed ? item.name : undefined}
               >
-                <item.icon className={cn("min-w-5 min-h-5 w-5 h-5", isActive ? (isClinician ? "text-orange-500" : "text-brand-secondary") : "text-muted-foreground")} />
+                <item.icon className={cn("min-w-5 min-h-5 w-5 h-5", isActive ? "text-clinical-primary" : "text-muted-foreground")} />
                 {(!isDesktopMenuCollapsed || isMobileMenuOpen) && (
-                  <span className="whitespace-nowrap">{item.name}</span>
+                  <span className={cn("whitespace-nowrap", isActive ? "font-semibold" : "")}>{item.name === 'Dashboard' ? 'Dashboard (Blue)' : item.name}</span>
                 )}
               </Link>
             );
@@ -154,7 +155,7 @@ export function DashboardLayout({ children, userRole, userName }: DashboardLayou
             <h1 className="text-2xl font-heading font-bold text-foreground">
               Welcome back{userName ? `, ${userName}` : ""}
             </h1>
-            <p className="text-sm text-muted-foreground mt-1">
+            <p className="text-sm text-muted-foreground mt-1" suppressHydrationWarning>
               {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
             </p>
           </div>
@@ -164,21 +165,24 @@ export function DashboardLayout({ children, userRole, userName }: DashboardLayou
           </div>
         </header>
 
-        <main className="flex-1 overflow-y-auto bg-background p-4 sm:p-8">
-          <div className="max-w-6xl mx-auto">
-            {/* Mobile Welcome Header */}
-            <div className="md:hidden mb-6">
-              <h1 className="text-2xl font-heading font-bold text-foreground">
-                Welcome back{userName ? `, ${userName}` : ""}
-              </h1>
-              <p className="text-sm text-muted-foreground mt-1">
-                {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
-              </p>
+        <div className="flex-1 overflow-y-auto bg-background flex flex-col">
+          <main className="flex-1 p-4 sm:p-8 flex flex-col">
+            <div className="max-w-6xl mx-auto w-full flex-1">
+              {/* Mobile Welcome Header */}
+              <div className="md:hidden mb-6">
+                <h1 className="text-2xl font-heading font-bold text-foreground">
+                  Welcome back{userName ? `, ${userName}` : ""}
+                </h1>
+                <p className="text-sm text-muted-foreground mt-1" suppressHydrationWarning>
+                  {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
+                </p>
+              </div>
+              
+              {children}
             </div>
-            
-            {children}
-          </div>
-        </main>
+          </main>
+          <PlatformFooter />
+        </div>
       </div>
     </div>
   );

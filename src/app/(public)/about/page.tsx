@@ -27,7 +27,7 @@ export default async function AboutPage() {
         </div>
         
         <h1 className="text-4xl md:text-6xl lg:text-7xl font-heading font-bold tracking-tight text-foreground mb-8 max-w-4xl mx-auto">
-          We build the <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-500 font-serif italic">infrastructure</span> for objective mental health.
+          We build the <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-brand-violet font-serif italic">infrastructure</span> for objective mental health.
         </h1>
         
         <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
@@ -63,8 +63,8 @@ export default async function AboutPage() {
 
             {/* Principle 3 */}
             <div className="p-8 rounded-2xl bg-card border border-border shadow-sm">
-              <div className="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center mb-6">
-                <LineChart className="w-6 h-6 text-purple-500" />
+              <div className="w-12 h-12 rounded-xl bg-brand-violet/10 flex items-center justify-center mb-6">
+                <LineChart className="w-6 h-6 text-brand-violet" />
               </div>
               <h3 className="text-xl font-heading font-bold text-foreground mb-4">Science is Public</h3>
               <p className="text-muted-foreground leading-relaxed">
@@ -98,7 +98,7 @@ export default async function AboutPage() {
           </div>
           <div className="w-full lg:w-1/2">
             <div className="aspect-square md:aspect-[4/3] rounded-3xl border border-border bg-muted/50 overflow-hidden relative group">
-              <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/20 to-purple-500/20 mix-blend-overlay group-hover:opacity-75 transition-opacity duration-700" />
+              <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/20 to-brand-violet/20 mix-blend-overlay group-hover:opacity-75 transition-opacity duration-700" />
               <div className="absolute inset-0 flex items-center justify-center p-12 text-center">
                 <p className="font-serif italic text-2xl md:text-3xl lg:text-4xl text-foreground/80 leading-relaxed font-light">
                   "Advancing psychiatric care through acoustic biomarkers and behavioral orchestration."
