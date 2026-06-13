@@ -54,7 +54,7 @@ model User {
   consents          UserConsent[]
   assessments       Assessment[]
   anonymousSessions AnonymousSession[]
-  
+
   patientNotes        ClinicalNote[] @relation("PatientNotes")
   clinicianNotes      ClinicalNote[] @relation("ClinicianNotes")
   reviewedAssessments Assessment[]   @relation("AssessmentReviewer")
@@ -71,9 +71,25 @@ model AnonymousSession {
   createdAt       DateTime  @default(now()) @db.Timestamptz
   expiresAt       DateTime  @db.Timestamptz
 
-  user        User?         @relation(fields: [convertedUserId], references: [id])
-  assessments Assessment[]
-  consents    UserConsent[]
+  user             User?                       @relation(fields: [convertedUserId], references: [id])
+  assessments      Assessment[]
+  consents         UserConsent[]
+  anonymousMetrics AnonymousAssessmentMetric[]
+}
+
+model AnonymousAssessmentMetric {
+  id               String   @id @default(uuid()) @db.Uuid
+  sessionId        String   @db.Uuid
+  assessmentType   String   @db.VarChar(50)
+  score            Int
+  severity         String   @db.VarChar(50)
+  completionSource String?  @db.VarChar(100)
+  durationSeconds  Int?
+  isHighRisk       Boolean  @default(false)
+  completedAt      DateTime @db.Timestamptz
+  createdAt        DateTime @default(now()) @db.Timestamptz
+
+  anonymousSession AnonymousSession @relation(fields: [sessionId], references: [id])
 }
 
 model ConsentVersion {
@@ -120,17 +136,17 @@ model AssessmentTemplate {
 }
 
 model Assessment {
-  id                 String           @id @default(uuid()) @db.Uuid
-  userId             String?          @db.Uuid
-  anonymousSessionId String?          @db.Uuid
-  templateId         String           @db.Uuid
-  templateSnapshot   Json             @default("{}")
-  status             AssessmentStatus @default(DRAFT)
+  id                 String                 @id @default(uuid()) @db.Uuid
+  userId             String?                @db.Uuid
+  anonymousSessionId String?                @db.Uuid
+  templateId         String                 @db.Uuid
+  templateSnapshot   Json                   @default("{}")
+  status             AssessmentStatus       @default(DRAFT)
   reviewStatus       AssessmentReviewStatus @default(PENDING)
-  reviewedAt         DateTime?        @db.Timestamptz
-  reviewedById       String?          @db.Uuid
-  createdAt          DateTime         @default(now()) @db.Timestamptz
-  updatedAt          DateTime         @updatedAt @db.Timestamptz
+  reviewedAt         DateTime?              @db.Timestamptz
+  reviewedById       String?                @db.Uuid
+  createdAt          DateTime               @default(now()) @db.Timestamptz
+  updatedAt          DateTime               @updatedAt @db.Timestamptz
 
   user             User?                @relation(fields: [userId], references: [id])
   reviewer         User?                @relation("AssessmentReviewer", fields: [reviewedById], references: [id])
@@ -175,20 +191,20 @@ model AuditLog {
 }
 
 model ClinicalNote {
-  id           String   @id @default(uuid()) @db.Uuid
+  id String @id @default(uuid()) @db.Uuid
 
-  patientId    String   @db.Uuid
-  clinicianId  String   @db.Uuid
+  patientId   String @db.Uuid
+  clinicianId String @db.Uuid
 
-  assessmentId String?  @db.Uuid
+  assessmentId String? @db.Uuid
 
-  title        String?  @db.VarChar(200)
-  content      String   @db.Text
+  title   String? @db.VarChar(200)
+  content String  @db.Text
 
-  createdAt    DateTime @default(now()) @db.Timestamptz
-  updatedAt    DateTime @updatedAt @db.Timestamptz
+  createdAt DateTime @default(now()) @db.Timestamptz
+  updatedAt DateTime @updatedAt @db.Timestamptz
 
-  patient      User        @relation("PatientNotes", fields: [patientId], references: [id])
-  clinician    User        @relation("ClinicianNotes", fields: [clinicianId], references: [id])
-  assessment   Assessment? @relation(fields: [assessmentId], references: [id])
+  patient    User        @relation("PatientNotes", fields: [patientId], references: [id])
+  clinician  User        @relation("ClinicianNotes", fields: [clinicianId], references: [id])
+  assessment Assessment? @relation(fields: [assessmentId], references: [id])
 }

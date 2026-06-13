@@ -6,7 +6,7 @@ import { Pool } from "@neondatabase/serverless";
 const isClinicianRoute = createRouteMatcher(["/clinician(.*)"]);
 const isAdminRoute = createRouteMatcher(["/admin(.*)"]);
 const isUserRoute = createRouteMatcher(["/dashboard(.*)", "/assessment(.*)", "/results(.*)", "/resources(.*)"]);
-const isPublicRoute = createRouteMatcher(["/", "/about", "/research", "/onboarding", `${AUTH_ROUTES.SIGN_IN}(.*)`, `${AUTH_ROUTES.SIGN_UP}(.*)`, "/api/webhooks(.*)", "/api/assessments(.*)"]);
+const isPublicRoute = createRouteMatcher(["/", "/about", "/research", "/onboarding", `${AUTH_ROUTES.SIGN_IN}(.*)`, `${AUTH_ROUTES.SIGN_UP}(.*)`, "/api/webhooks(.*)", "/api/assessments(.*)", "/assessments/anonymous(.*)"]);
 
 // 60-second in-memory Edge Cache for authorization roles
 const roleCache = new Map<string, { role: string; expires: number }>();

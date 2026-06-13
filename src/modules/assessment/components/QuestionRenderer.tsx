@@ -24,7 +24,7 @@ export function QuestionRenderer({ question, currentValue, onChange }: QuestionR
           const isNumeric = question.options?.length && typeof question.options[0].value === "number";
           onChange(isNumeric ? parseInt(val, 10) : val);
         }}
-        className="flex flex-col gap-3 mt-8"
+        className="flex flex-col gap-3"
       >
         {question.options?.map((opt) => {
           const optValueStr = String(opt.value);
@@ -37,8 +37,8 @@ export function QuestionRenderer({ question, currentValue, onChange }: QuestionR
               htmlFor={id}
               className={`flex items-center space-x-4 rounded-xl border p-5 cursor-pointer transition-all duration-200 ${
                 isSelected 
-                  ? "bg-zinc-900 border-zinc-900 text-white dark:bg-white dark:border-white dark:text-zinc-900 shadow-md scale-[1.01]" 
-                  : "bg-white border-zinc-200 hover:border-zinc-400 hover:bg-zinc-50 dark:bg-zinc-950 dark:border-zinc-800 dark:hover:border-zinc-600 text-zinc-900 dark:text-zinc-100"
+                  ? "bg-zinc-900 border-zinc-900 text-white dark:bg-white dark:border-white dark:text-slate-950 shadow-md scale-[1.01]" 
+                  : "bg-slate-50 border-zinc-200 hover:border-zinc-300 hover:bg-slate-100 dark:bg-slate-800/50 dark:border-slate-700 dark:hover:border-slate-600 dark:hover:bg-slate-800 text-zinc-900 dark:text-slate-200"
               }`}
             >
               <RadioGroupItem 
@@ -58,7 +58,7 @@ export function QuestionRenderer({ question, currentValue, onChange }: QuestionR
 
   // Fallback for unsupported types
   return (
-    <div className="p-6 mt-8 border border-amber-200 rounded-xl bg-amber-50 text-amber-900 dark:bg-amber-950/30 dark:border-amber-800 dark:text-amber-200">
+    <div className="p-6 border border-amber-200 rounded-xl bg-amber-50 text-amber-900 dark:bg-amber-950/30 dark:border-amber-800 dark:text-amber-200">
       <p className="font-semibold">Unsupported question type: {question.type}</p>
       <p className="text-sm mt-1 opacity-80">Please contact support.</p>
     </div>

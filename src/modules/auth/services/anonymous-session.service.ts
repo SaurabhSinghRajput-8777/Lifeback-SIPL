@@ -62,4 +62,22 @@ export class AnonymousSessionService {
 
     return updatedSession;
   }
+
+  static async extendTTL(anonymousId: string) {
+    const expiresAt = new Date();
+    expiresAt.setDate(expiresAt.getDate() + 30); // Extend by 30 days
+
+    await prisma.anonymousSession.update({
+      where: { anonymousId },
+      data: { expiresAt },
+    });
+
+    const cookieStore = await cookies();
+    cookieStore.set(this.COOKIE_NAME, anonymousId, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      expires: expiresAt,
+    });
+  }
 }

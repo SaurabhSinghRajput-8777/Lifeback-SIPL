@@ -11,11 +11,12 @@ export default async function AssessmentLayout({
 
 
   return (
-    <div className="flex flex-col min-h-screen">
-
+    <div className="flex flex-col min-h-screen bg-slate-50 dark:bg-gradient-to-br dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 relative z-0">
+      {/* Premium Two-Tone Background */}
+      <div className="absolute inset-x-0 top-0 h-[500px] bg-gradient-to-b from-indigo-50/80 via-indigo-50/20 to-transparent dark:hidden -z-10" />
 
       {/* Main Content */}
-      <main className="flex-1 flex flex-col w-full">
+      <main className="flex-1 flex flex-col w-full relative z-10">
         {children}
       </main>
 

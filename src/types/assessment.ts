@@ -22,5 +22,7 @@ export interface AssessmentResult {
   totalScore: number;
   severity: string;
   summary: string;
+  isHighRisk?: boolean;
+  riskLevel?: number;
   metadata?: Record<string, unknown>;
 }

@@ -54,9 +54,9 @@ export default async function Home() {
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4">
-                <Link href={userId ? "/dashboard" : "/assessments/new"}>
+                <Link href={userId ? "/dashboard" : "/assessments/anonymous?source=LANDING_PAGE"}>
                   <Button size="lg" className="cursor-pointer w-full sm:w-auto h-14 px-8 rounded-none font-heading font-bold text-[15px] bg-foreground text-background hover:bg-foreground/90 transition-colors">
-                    {userId ? "Go  To  Dashboard" : "Take Free Assessment"} <ArrowRight className="ml-2 h-5 w-5" />
+                    {userId ? "Go  To  Dashboard" : "Take Anonymous Assessment"} <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                 </Link>
                 {!userId && (
@@ -280,7 +280,7 @@ export default async function Home() {
 
           <div className="relative z-10 max-w-[1440px] mx-auto text-center">
             <h2 className="text-[48px] md:text-[64px] font-heading font-bold text-foreground mb-8 tracking-tight">Begin Evaluation</h2>
-            <Link href="/assessments/new">
+            <Link href={userId ? "/assessments/new" : "/assessments/anonymous?source=LANDING_PAGE"}>
               <Button size="lg" className="cursor-pointer h-16 px-12 rounded-none text-[16px] font-heading font-bold bg-foreground text-background hover:bg-foreground/90 transition-colors shadow-2xl">
                 Start PHQ-9 Assessment
               </Button>
