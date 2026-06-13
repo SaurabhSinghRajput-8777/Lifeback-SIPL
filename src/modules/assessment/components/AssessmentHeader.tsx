@@ -29,17 +29,10 @@ export function AssessmentHeader({ isCompleted = false, exitUrl }: AssessmentHea
               className={`cursor-pointer font-medium px-4 py-2 h-auto transition-colors ${
                 !isCompleted 
                   ? "text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white border-zinc-200 dark:border-zinc-800" 
-                  : ""
+                  : "bg-zinc-900 hover:bg-zinc-800 text-white dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-200"
               }`}
             >
-              {isCompleted ? (
-                <>
-                  <Home className="w-4 h-4 mr-2" />
-                  Home
-                </>
-              ) : (
-                "Exit Test"
-              )}
+              {isCompleted ? "Return Home" : "Exit Test"}
             </Button>
           </Link>
         </div>

@@ -282,7 +282,7 @@ export default async function Home() {
             <h2 className="text-[48px] md:text-[64px] font-heading font-bold text-foreground mb-8 tracking-tight">Begin Evaluation</h2>
             <Link href={userId ? "/assessments/new" : "/assessments/anonymous?source=LANDING_PAGE"}>
               <Button size="lg" className="cursor-pointer h-16 px-12 rounded-none text-[16px] font-heading font-bold bg-foreground text-background hover:bg-foreground/90 transition-colors shadow-2xl">
-                Start PHQ-9 Assessment
+                Start Anonymous PHQ-9 Assessment
               </Button>
             </Link>
           </div>

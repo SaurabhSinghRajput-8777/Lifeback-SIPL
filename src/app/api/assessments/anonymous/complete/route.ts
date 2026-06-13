@@ -84,7 +84,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ 
       metricId: metric.id,
-      score: result.totalScore, 
+      totalScore: result.totalScore, 
       severity: result.severity, 
       isHighRisk,
       riskLevel,

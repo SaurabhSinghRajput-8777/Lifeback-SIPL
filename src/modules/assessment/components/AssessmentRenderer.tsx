@@ -8,6 +8,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription }
 import { Loader2, CheckCircle2, ArrowLeft, ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { AssessmentResults } from "./AssessmentResults";
+import { AssessmentHeader } from "./AssessmentHeader";
 
 interface AssessmentRendererProps {
   assessmentId: string;
@@ -15,6 +16,7 @@ interface AssessmentRendererProps {
   initialResponses?: Record<string, unknown>;
   mode?: "authenticated" | "anonymous";
   completionSource?: string;
+  exitUrl?: string;
 }
 
 export function AssessmentRenderer({
@@ -23,6 +25,7 @@ export function AssessmentRenderer({
   initialResponses = {},
   mode = "authenticated",
   completionSource,
+  exitUrl = "/",
 }: AssessmentRendererProps) {
   const router = useRouter();
   const questions = templateConfig.questions || [];
@@ -103,12 +106,19 @@ export function AssessmentRenderer({
   };
 
   if (anonymousResult) {
-    return <AssessmentResults result={anonymousResult} isAnonymous={true} />;
+    return (
+      <>
+        <AssessmentHeader exitUrl={exitUrl} isCompleted={true} />
+        <AssessmentResults result={anonymousResult} isAnonymous={true} />
+      </>
+    );
   }
 
   if (isReviewScreen) {
     return (
-      <div className="w-full max-w-3xl mx-auto flex flex-col gap-6 px-4 py-8 sm:py-12 animate-in fade-in zoom-in-95 duration-500">
+      <>
+        <AssessmentHeader exitUrl={exitUrl} isCompleted={false} />
+        <div className="w-full max-w-3xl mx-auto flex flex-col gap-6 px-4 py-8 sm:py-12 animate-in fade-in zoom-in-95 duration-500">
         <Card className="relative overflow-hidden border-zinc-200 dark:border-slate-800/80 shadow-[0_8px_30px_rgb(0,0,0,0.08)] dark:shadow-2xl dark:shadow-black/50 bg-white dark:bg-slate-900 rounded-3xl text-center p-0">
           <div className="flex flex-col bg-slate-50/80 dark:bg-slate-800/20 w-full h-full relative">
             <CardHeader className="pt-14 pb-8">
@@ -147,6 +157,7 @@ export function AssessmentRenderer({
           </div>
         </Card>
       </div>
+      </>
     );
   }
 
@@ -158,8 +169,10 @@ export function AssessmentRenderer({
   const currentValue = responses[currentQuestion.id];
 
   return (
-    <div className="w-full max-w-6xl mx-auto flex flex-col gap-6 sm:gap-8 px-4 py-8 sm:py-12">
-      {/* Segmented Progress Indicator */}
+    <>
+      <AssessmentHeader exitUrl={exitUrl} isCompleted={false} />
+      <div className="w-full max-w-6xl mx-auto flex flex-col gap-6 sm:gap-8 px-4 py-8 sm:py-12">
+        {/* Segmented Progress Indicator */}
       <div className="flex flex-col gap-3 max-w-3xl mx-auto w-full">
         <div className="flex items-center justify-between text-sm font-medium tracking-wide text-zinc-500 dark:text-zinc-400">
           <span>Question {currentIndex + 1} of {questions.length}</span>
@@ -270,5 +283,6 @@ export function AssessmentRenderer({
         </Card>
       </div>
     </div>
+    </>
   );
 }

@@ -51,13 +51,11 @@ export default async function AssessmentPage({
   }
 
   return (
-    <>
-      <AssessmentHeader exitUrl={exitUrl} isCompleted={false} />
-      <AssessmentRenderer 
-        assessmentId={assessment.id} 
-        templateConfig={assessment.templateSnapshot as unknown as AssessmentTemplateConfig}
-        initialResponses={initialResponses}
-      />
-    </>
+    <AssessmentRenderer 
+      assessmentId={assessment.id} 
+      templateConfig={assessment.templateSnapshot as unknown as AssessmentTemplateConfig}
+      initialResponses={initialResponses}
+      exitUrl={exitUrl}
+    />
   );
 }

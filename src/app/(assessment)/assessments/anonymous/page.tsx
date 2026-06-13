@@ -19,14 +19,12 @@ export default async function AnonymousAssessmentPage({
   const exitUrl = "/";
 
   return (
-    <>
-      <AssessmentHeader exitUrl={exitUrl} isCompleted={false} />
-      <AssessmentRenderer 
-        assessmentId="anonymous" 
-        templateConfig={template.config as unknown as AssessmentTemplateConfig}
-        mode="anonymous"
-        completionSource={source || "DIRECT_LINK"}
-      />
-    </>
+    <AssessmentRenderer 
+      assessmentId="anonymous" 
+      templateConfig={template.config as unknown as AssessmentTemplateConfig}
+      mode="anonymous"
+      completionSource={source || "DIRECT_LINK"}
+      exitUrl={exitUrl}
+    />
   );
 }
