@@ -41,8 +41,13 @@ export class OnboardingService {
   }) {
     const resolvedRole = this.resolveRole(params.unsafeRoleFromClerk);
 
-    const user = await db.user.create({
-      data: {
+    const user = await db.user.upsert({
+      where: { email: params.email },
+      update: {
+        clerkId: params.clerkId,
+        role: resolvedRole,
+      },
+      create: {
         clerkId: params.clerkId,
         email: params.email,
         role: resolvedRole,

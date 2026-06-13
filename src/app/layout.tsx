@@ -37,7 +37,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
+    <ClerkProvider
+      appearance={{
+        elements: {
+          modalBackdrop: "bg-black/60 backdrop-blur-md z-[100]"
+        }
+      }}
+    >
       <html
         lang="en"
         className={`${inter.variable} ${plusJakartaSans.variable} ${spaceMono.variable} ${dancingScript.variable} h-full antialiased`}

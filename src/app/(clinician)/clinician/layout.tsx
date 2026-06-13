@@ -17,11 +17,13 @@ export default async function ClinicianDashboardLayout({
   });
 
   if (!dbUser) {
-    // Fallback sync in case the Clerk webhook was delayed or missed
-    dbUser = await prisma.user.create({
-      data: {
+    const email = clerkUser.emailAddresses[0]?.emailAddress || `${clerkUser.id}@placeholder.com`;
+    dbUser = await prisma.user.upsert({
+      where: { email },
+      update: { clerkId: clerkUser.id },
+      create: {
         clerkId: clerkUser.id,
-        email: clerkUser.emailAddresses[0]?.emailAddress || `${clerkUser.id}@placeholder.com`,
+        email,
         role: "USER", // Will be upgraded manually or via admin UI later
       }
     });

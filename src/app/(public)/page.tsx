@@ -60,7 +60,7 @@ export default async function Home() {
                   </Button>
                 </Link>
                 {!userId && (
-                  <CreateAccountButton />
+                  <CreateAccountButton className="w-full sm:w-auto h-14 px-8 rounded-none text-[15px]" />
                 )}
               </div>
             </div>

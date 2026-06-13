@@ -1,21 +1,30 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { RoleSelectionModal } from "@/components/auth/RoleSelectionModal";
+import { cn } from "@/lib/utils";
 
-export function CreateAccountButton() {
+export function CreateAccountButton({ children, onClick, className, variant = "outline", size = "lg", ...props }: React.ComponentProps<typeof Button>) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <>
       <Button 
-        onClick={() => setIsModalOpen(true)}
-        size="lg" 
-        variant="outline" 
-        className="cursor-pointer w-full sm:w-auto h-14 px-8 rounded-none font-heading font-bold text-[15px] border-border bg-transparent text-foreground hover:bg-foreground/5 transition-colors"
+        onClick={(e) => {
+          setIsModalOpen(true);
+          onClick?.(e);
+        }}
+        variant={variant}
+        size={size}
+        className={cn(
+          "cursor-pointer transition-all duration-300 font-heading font-bold",
+          "bg-black/5 hover:bg-black/10 dark:bg-white/5 dark:hover:bg-white/10 backdrop-blur-md border border-black/10 dark:border-white/10 text-foreground",
+          className
+        )}
+        {...props}
       >
-        Create Account
+        {children || "Create Account"}
       </Button>
       
       <RoleSelectionModal 
