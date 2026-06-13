@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { CreateAccountButton } from "@/components/auth/CreateAccountButton";
+import { MobileCarousel } from "@/components/ui/mobile-carousel";
 import { auth } from "@clerk/nextjs/server";
 import {
   ArrowRight,
@@ -38,18 +39,18 @@ export default async function Home() {
             />
           </video>
 
-          <div className="max-w-[1440px] w-full mx-auto relative z-10 flex flex-col lg:flex-row gap-8 lg:gap-12 items-center">
+          <div className="max-w-[1440px] w-full mx-auto relative flex flex-col lg:flex-row gap-8 lg:gap-12 items-center">
             <div className="w-full max-w-[880px] shrink-0">
               <div className="mb-8 inline-flex items-center text-[12px] font-mono font-bold uppercase tracking-[0.14em] text-foreground/60">
                 <div className="w-2 h-2 rounded-full bg-brand-secondary mr-3" />
                 Clinical-Grade PHQ-9 Assessment Engine
               </div>
 
-              <h1 className="font-heading text-[56px] leading-[1.05] md:text-[80px] lg:text-[96px] tracking-tight text-foreground mb-10">
+              <h1 className="font-heading text-5xl sm:text-[56px] leading-[1.05] md:text-[80px] lg:text-[96px] tracking-tight text-foreground mb-8 sm:mb-10 break-words">
                 Understand your <span style={{ fontFamily: "var(--font-dancing), cursive" }} className="font-normal text-[1.2em] opacity-90 pr-2">mental health</span> with absolute precision.
               </h1>
 
-              <p className="font-body text-[18px] md:text-[22px] text-foreground/70 mb-12 max-w-2xl leading-relaxed">
+              <p className="font-body text-base sm:text-[18px] md:text-[22px] text-foreground/70 mb-10 sm:mb-12 max-w-2xl leading-relaxed">
                 A private, stark, evidence-based platform for screening depression. Zero friction. No accounts required to start.
               </p>
 
@@ -112,20 +113,20 @@ export default async function Home() {
         {/* 2. TRUST BAR */}
         <section className="border-b border-border dark:border-white/5 bg-background dark:bg-[#0B0F19] py-16 px-6 md:px-10 lg:px-16 xl:px-20">
           <div className="max-w-[1440px] mx-auto">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-12">
+            <MobileCarousel autoScrollInterval={3000} className="flex sm:grid sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-x-8 sm:gap-y-12 overflow-x-auto snap-x snap-mandatory pb-6 sm:pb-0 hide-scrollbar -mx-6 px-6 sm:mx-0 sm:px-0">
               {[
                 { icon: UserCheck, label: "Anonymous Access", desc: "Start instantly. Privacy guaranteed." },
                 { icon: Stethoscope, label: "Evidence-Based", desc: "Powered by the clinical PHQ-9 standard." },
                 { icon: Lock, label: "Secure Processing", desc: "Data never leaves encrypted constraints." },
                 { icon: Clock, label: "Instant Clarity", desc: "Actionable results in under 3 minutes." }
               ].map((item, idx) => (
-                <div key={idx} className="flex flex-col border-l border-border pl-6 group">
+                <div key={idx} className="flex flex-col border-l border-border pl-6 group w-[85vw] sm:w-auto flex-shrink-0 snap-center sm:snap-align-none">
                   <item.icon className="h-6 w-6 text-foreground mb-6" strokeWidth={1.5} />
                   <span className="text-[15px] font-heading font-bold text-foreground mb-2">{item.label}</span>
                   <p className="text-[13px] font-body text-foreground/60 leading-relaxed">{item.desc}</p>
                 </div>
               ))}
-            </div>
+            </MobileCarousel>
           </div>
         </section>
 
@@ -133,16 +134,16 @@ export default async function Home() {
         <section className="bg-[#121214] text-white py-32 px-6 md:px-10 lg:px-16 xl:px-20 overflow-hidden relative">
           <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.03] pointer-events-none" />
 
-          <div className="max-w-[1440px] mx-auto relative z-10 grid lg:grid-cols-[1fr_1.5fr] gap-20 items-center">
+          <div className="max-w-[1440px] mx-auto relative grid lg:grid-cols-[1fr_1.5fr] gap-12 lg:gap-20 items-center">
 
             <div className="max-w-xl">
               <div className="mb-6 inline-flex items-center text-[11px] font-mono font-bold uppercase tracking-[0.14em] text-brand-secondary">
                 Data Output
               </div>
-              <h2 className="text-[44px] md:text-[56px] font-heading font-bold mb-8 leading-tight tracking-tight">
+              <h2 className="text-4xl md:text-[44px] lg:text-[56px] font-heading font-bold mb-6 sm:mb-8 leading-tight tracking-tight break-words">
                 Clear, actionable scoring framework.
               </h2>
-              <p className="text-[18px] font-body text-white/60 leading-relaxed mb-10">
+              <p className="text-base sm:text-[18px] font-body text-white/60 leading-relaxed mb-10">
                 LifeBack translates your PHQ-9 responses into a definitive severity matrix. You retain complete control over this data—export it, save it, or delete it instantly.
               </p>
 
@@ -168,17 +169,17 @@ export default async function Home() {
                   <div className="w-2.5 h-2.5 rounded-full bg-white/20" />
                   <div className="w-2.5 h-2.5 rounded-full bg-white/20" />
                 </div>
-                <div className="p-8 md:p-12">
+                <div className="p-6 sm:p-8 md:p-12">
                   <div className="text-[11px] font-mono font-bold text-white/40 uppercase tracking-[0.14em] mb-4">Final Report</div>
                   <div className="flex items-end gap-6 mb-12 pb-12 border-b border-white/10">
-                    <div className="text-[88px] font-heading font-bold leading-none tracking-tighter text-white">
+                    <div className="text-7xl sm:text-[88px] font-heading font-bold leading-none tracking-tighter text-white">
                       12
                     </div>
-                    <div className="text-[24px] font-mono text-white/40 pb-3">/ 27</div>
+                    <div className="text-xl sm:text-[24px] font-mono text-white/40 pb-3">/ 27</div>
                   </div>
                   <div className="flex items-center gap-4 mb-4">
                     <div className="h-3 w-3 bg-brand-secondary shadow-[0_0_12px_rgba(132,157,142,0.8)]" />
-                    <h4 className="text-[24px] font-heading font-bold text-white">Moderate Severity</h4>
+                    <h4 className="text-xl sm:text-[24px] font-heading font-bold text-white">Moderate Severity</h4>
                   </div>
                   <p className="text-white/60 font-body leading-relaxed text-[16px] max-w-lg">
                     Scores in this range indicate moderate depressive symptoms. Monitoring, lifestyle adjustments, or consulting a healthcare professional is recommended for a formal evaluation.
@@ -194,13 +195,13 @@ export default async function Home() {
         <section className="py-24 md:py-32 px-6 md:px-10 lg:px-16 xl:px-20 bg-[#F9F9F8] dark:bg-[#0B0F19] border-b border-border dark:border-white/5 overflow-hidden">
           <div className="max-w-[1440px] mx-auto">
             <div className="max-w-3xl mb-20">
-              <h2 className="text-[40px] md:text-[48px] leading-tight font-heading font-bold text-foreground mb-6">
+              <h2 className="text-4xl md:text-[40px] lg:text-[48px] leading-tight font-heading font-bold text-foreground mb-6 break-words">
                 Standardized Process
               </h2>
-              <p className="text-[18px] font-body text-foreground/70 leading-relaxed">A rigid, five-step clinical flow engineered to provide clarity in under three minutes.</p>
+              <p className="text-base sm:text-[18px] font-body text-foreground/70 leading-relaxed">A rigid, five-step clinical flow engineered to provide clarity in under three minutes.</p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-5 border-t border-l border-foreground/15">
+            <MobileCarousel autoScrollInterval={4000} className="flex md:grid md:grid-cols-5 border-y sm:border-y-0 sm:border-t sm:border-l border-foreground/15 overflow-x-auto snap-x snap-mandatory hide-scrollbar -mx-6 px-6 md:mx-0 md:px-0">
               {[
                 { step: "01", title: "Initialize", desc: "No account required." },
                 { step: "02", title: "Input", desc: "9 clinical questions." },
@@ -208,7 +209,7 @@ export default async function Home() {
                 { step: "04", title: "Output", desc: "Severity stratification." },
                 { step: "05", title: "Retain", desc: "Optional data storage." }
               ].map((item, idx) => (
-                <div key={idx} className="group relative border-r border-b border-foreground/15 p-8 bg-transparent hover:bg-white dark:hover:bg-zinc-900/50 transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] hover:z-10 overflow-hidden">
+                <div key={idx} className="group relative border-r border-b border-foreground/15 p-8 bg-transparent hover:bg-white dark:hover:bg-zinc-900/50 transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] hover:z-10 overflow-hidden w-[85vw] md:w-auto flex-shrink-0 snap-center md:snap-align-none">
                   <div className="absolute top-0 left-0 w-full h-[2px] bg-brand-secondary transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-500 ease-out" />
 
                   <div className="absolute -bottom-6 -right-2 text-[100px] font-heading font-bold text-foreground/[0.03] group-hover:text-foreground/[0.06] transition-colors duration-500 pointer-events-none select-none">
@@ -225,27 +226,27 @@ export default async function Home() {
                   </div>
                 </div>
               ))}
-            </div>
+            </MobileCarousel>
           </div>
         </section>
 
         {/* 5. WHY LIFEBACK */}
         <section className="py-24 md:py-32 px-6 md:px-10 lg:px-16 xl:px-20 bg-[#121214] border-b border-white/5">
           <div className="max-w-[1440px] mx-auto">
-            <div className="grid lg:grid-cols-[1fr_2fr] gap-20">
+            <div className="grid lg:grid-cols-[1fr_2fr] gap-12 lg:gap-20">
               <div>
-                <h2 className="text-[40px] md:text-[48px] font-heading font-bold text-white mb-6 leading-tight">Architecture of Trust</h2>
-                <p className="text-[18px] font-body text-white/70 leading-relaxed">Built for precision, privacy, and clinical relevance.</p>
+                <h2 className="text-4xl md:text-[40px] lg:text-[48px] font-heading font-bold text-white mb-6 leading-tight break-words">Architecture of Trust</h2>
+                <p className="text-base sm:text-[18px] font-body text-white/70 leading-relaxed">Built for precision, privacy, and clinical relevance.</p>
               </div>
 
-              <div className="grid sm:grid-cols-2 gap-x-12 gap-y-16">
+              <MobileCarousel autoScrollInterval={3500} className="flex sm:grid sm:grid-cols-2 gap-8 sm:gap-x-12 sm:gap-y-16 overflow-x-auto snap-x snap-mandatory pb-6 sm:pb-0 hide-scrollbar -mx-6 px-6 sm:mx-0 sm:px-0">
                 {[
                   { icon: FileText, title: "Research Standard", desc: "Strict adherence to the Patient Health Questionnaire (PHQ-9) diagnostic criteria." },
                   { icon: Lock, title: "Zero Telemetry", desc: "Your data remains in your session. We do not track keystrokes or analytics during assessments." },
                   { icon: Stethoscope, title: "Human Oversight", desc: "Designed as an assistive triage instrument, never as a replacement for professional diagnosis." },
                   { icon: Activity, title: "Data Portability", desc: "Export your results instantly. If you create an account, you retain absolute deletion rights." }
                 ].map((feature, idx) => (
-                  <div key={idx} className="group relative">
+                  <div key={idx} className="group relative w-[85vw] sm:w-auto flex-shrink-0 snap-center sm:snap-align-none">
                     <div className="h-12 w-12 rounded-[4px] bg-white/5 flex items-center justify-center mb-6 group-hover:bg-orange-500/15 transition-colors duration-500">
                       <feature.icon className="h-5 w-5 text-white/50 group-hover:text-orange-400 transition-colors duration-500" strokeWidth={1.5} />
                     </div>
@@ -257,7 +258,7 @@ export default async function Home() {
                     <p className="text-[15px] font-body text-white/60 leading-relaxed group-hover:text-white/90 transition-colors duration-500">{feature.desc}</p>
                   </div>
                 ))}
-              </div>
+              </MobileCarousel>
             </div>
           </div>
         </section>
@@ -278,11 +279,11 @@ export default async function Home() {
             />
           </video>
 
-          <div className="relative z-10 max-w-[1440px] mx-auto text-center">
-            <h2 className="text-[48px] md:text-[64px] font-heading font-bold text-foreground mb-8 tracking-tight">Begin Evaluation</h2>
+          <div className="relative z-10 max-w-[1440px] mx-auto text-center px-4">
+            <h2 className="text-4xl sm:text-[48px] md:text-[64px] font-heading font-bold text-foreground mb-6 md:mb-8 tracking-tight break-words">Begin Evaluation</h2>
             <Link href={userId ? "/assessments/new" : "/assessments/anonymous?source=LANDING_PAGE"}>
-              <Button size="lg" className="cursor-pointer h-16 px-12 rounded-none text-[16px] font-heading font-bold bg-foreground text-background hover:bg-foreground/90 transition-colors shadow-2xl">
-                Start Anonymous PHQ-9 Assessment
+              <Button size="lg" className="cursor-pointer h-auto py-4 md:py-0 md:h-16 px-6 md:px-12 rounded-none text-sm md:text-[16px] font-heading font-bold bg-foreground text-background hover:bg-foreground/90 transition-colors shadow-2xl whitespace-normal text-center max-w-full">
+                {userId ? "Start PHQ-9 Assessment" : "Start Anonymous PHQ-9 Assessment"}
               </Button>
             </Link>
           </div>

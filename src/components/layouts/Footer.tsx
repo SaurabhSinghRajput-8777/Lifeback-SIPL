@@ -4,7 +4,9 @@ import { auth } from "@clerk/nextjs/server";
 
 const platformLinks = [
   { label: "About", href: "/about" },
+  { label: "Why LifeBack", href: "/why-lifeback" },
   { label: "How It Works", href: "/how-it-works" },
+  { label: "SIPL Homepage", href: process.env.NEXT_PUBLIC_SIPL_URL || "https://sequoiainsilico.com" },
 ];
 
 
@@ -22,15 +24,15 @@ export async function Footer() {
 
   const assessmentLinks = userId
     ? [{ label: "Dashboard", href: "/dashboard" }, { label: "New Assessment", href: "/assessments/new" }]
-    : [{ label: "PHQ-9 (Depression)", href: "/assessments/new" }];
+    : [{ label: "PHQ-9 (Depression)", href: "/assessments/anonymous?source=FOOTER" }];
 
   return (
     <footer className="w-full bg-background dark:bg-[#0B0F19] border-t border-border dark:border-white/10">
-      <div className="px-6 pb-10 pt-20 md:px-10 lg:px-16 xl:px-20">
-        <div className="grid gap-14 lg:grid-cols-[1fr_1fr_0.8fr_1.2fr] lg:items-start">
+      <div className="px-6 pb-8 pt-12 md:pb-10 md:pt-20 md:px-10 lg:px-16 xl:px-20">
+        <div className="flex flex-col lg:flex-row gap-12 lg:gap-16 lg:justify-between lg:items-start">
 
           {/* Brand Column */}
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-6 lg:max-w-sm">
             <Link href={userId ? "/dashboard" : "/"} className="flex items-center gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-4 focus-visible:ring-offset-background">
               <span className="font-heading text-[22px] font-bold tracking-[0.08em] text-foreground">
                 LifeBack
@@ -41,18 +43,20 @@ export async function Footer() {
             </p>
           </div>
 
-          <FooterColumn title="Platform" links={platformLinks} />
-          <FooterColumn title="Assessment" links={assessmentLinks} />
-          <FooterColumn title="Legal" links={legalLinks} />
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-8 sm:gap-12 lg:gap-16 w-full lg:w-auto">
+            <FooterColumn title="Platform" links={platformLinks} />
+            <FooterColumn title="Assessment" links={assessmentLinks} />
+            <FooterColumn title="Legal" links={legalLinks} />
+          </div>
         </div>
 
-        <div className="mt-20 border-t border-border pt-8">
-          <p className="max-w-6xl font-body text-[14px] leading-7 text-foreground/80">
+        <div className="mt-12 md:mt-20 border-t border-border pt-8">
+          <p className="max-w-6xl font-body text-[12px] md:text-[14px] leading-6 md:leading-7 text-foreground/80">
             {disclaimer}
           </p>
 
-          <p className="mt-8 font-mono text-[12px] uppercase tracking-[0.14em] text-foreground/60">
-            © 2026 LifeBack by Sequoia Insilico Pvt. Ltd.  All rights reserved.
+          <p className="mt-6 md:mt-8 font-mono text-[10px] md:text-[12px] uppercase tracking-[0.14em] text-foreground/60">
+            © 2026 LifeBack by Sequoia Insilico Pvt. Ltd. All rights reserved.
           </p>
         </div>
       </div>
