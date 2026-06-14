@@ -28,7 +28,7 @@ export async function DashboardRecentTable({ clerkId }: { clerkId: string }) {
                 </tr>
               </thead>
               <tbody className="divide-y divide-indigo-50 dark:divide-indigo-900/20">
-                {recent.map((item) => (
+                {recent.map((item: any) => (
                   <tr key={item.id} className="group hover:bg-white/60 dark:hover:bg-slate-800/60 transition-colors">
                     <td className="p-4 text-sm font-medium text-foreground">{item.name}</td>
                     <td className="p-4 text-sm text-muted-foreground">

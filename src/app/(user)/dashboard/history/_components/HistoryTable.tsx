@@ -38,7 +38,7 @@ export async function HistoryTable({ clerkId }: { clerkId: string }) {
             </tr>
           </thead>
           <tbody className="divide-y divide-border/80">
-            {allAssessments.map((item) => (
+            {allAssessments.map((item: any) => (
               <tr key={item.id} className="group hover:bg-muted/30 transition-colors">
                 <td className="p-4 text-sm font-medium text-foreground">{item.name}</td>
                 <td className="p-4 text-sm text-muted-foreground">
