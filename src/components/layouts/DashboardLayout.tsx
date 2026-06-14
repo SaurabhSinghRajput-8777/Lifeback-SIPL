@@ -42,14 +42,12 @@ export function DashboardLayout({ children, userRole, userName }: DashboardLayou
     { name: "Assessments", href: "/dashboard/assessments", icon: FileText },
     { name: "History", href: "/dashboard/history", icon: History },
     { name: "Insights", href: "/dashboard/insights", icon: BarChart2 },
-    { name: "About", href: "/about", icon: Info },
   ];
 
   const clinicianNavigation = [
     { name: "Dashboard", href: "/clinician", icon: LayoutDashboard },
     { name: "Patients", href: "/clinician/patients", icon: Users },
     { name: "High-Risk Queue", href: "/clinician/queue", icon: AlertTriangle },
-    { name: "About", href: "/about", icon: Info },
   ];
 
   const navigation = isClinician ? clinicianNavigation : userNavigation;

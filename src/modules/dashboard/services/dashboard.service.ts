@@ -3,26 +3,10 @@ import { RiskAssessmentService } from "./risk-assessment.service";
 
 export class DashboardService {
   /**
-   * Fetches the overview metrics for the User Dashboard MVP.
+   * Derives the overview metrics from the unified dataset.
    */
-  static async getDashboardOverview(clerkId: string) {
-    const user = await prisma.user.findUnique({
-      where: { clerkId },
-      include: {
-        assessments: {
-          orderBy: { createdAt: "desc" },
-          where: {
-            OR: [
-              { status: { not: "DRAFT" } },
-              { status: "DRAFT", responses: { some: {} } }
-            ]
-          },
-          include: { responses: true }
-        }
-      }
-    });
-
-    if (!user) {
+  static getDashboardOverview(dataset: any) {
+    if (!dataset) {
       return {
         latestScore: null,
         currentSeverity: "N/A",
@@ -32,27 +16,20 @@ export class DashboardService {
       };
     }
 
-    const assessments = user.assessments;
-    const completedCount = assessments.filter(a => a.status === "COMPLETED").length;
-    const inProgressCount = assessments.filter(a => a.status === "IN_PROGRESS" || a.status === "DRAFT").length;
+    const { assessments, draftsCount } = dataset;
+    
+    const completedAssessments = assessments.filter((a: any) => a.status === "COMPLETED");
+    const completedCount = completedAssessments.length;
+    const inProgressCount = assessments.filter((a: any) => a.status === "IN_PROGRESS").length + draftsCount;
 
     let latestScore = null;
     let currentSeverity = "N/A";
 
-    // Find the latest completed assessment to calculate score
-    const latestCompleted = assessments.find(a => a.status === "COMPLETED");
-    
-    if (latestCompleted && latestCompleted.responses.length > 0) {
-      const answers: Record<string, number> = {};
-      latestCompleted.responses.forEach(r => {
-        const val = typeof r.answer === 'object' && r.answer !== null && 'value' in r.answer 
-          ? Number((r.answer as { value: number }).value) 
-          : Number(r.answer);
-        answers[r.questionId] = isNaN(val) ? 0 : val;
-      });
-      
-      latestScore = RiskAssessmentService.calculateScore(answers);
-      currentSeverity = RiskAssessmentService.getSeverity(latestScore);
+    const latestCompleted = completedAssessments[0]; // Ordered by desc
+    if (latestCompleted && latestCompleted.report) {
+      const reportJson = latestCompleted.report.reportJson as any;
+      latestScore = reportJson.totalScore ?? null;
+      currentSeverity = latestCompleted.report.riskLevel || "N/A";
     }
 
     return {
@@ -65,39 +42,18 @@ export class DashboardService {
   }
 
   /**
-   * Fetches recent assessments for the user table.
+   * Derives recent assessments from the unified dataset.
    */
-  static async getRecentAssessments(clerkId: string, limit?: number) {
-    const user = await prisma.user.findUnique({
-      where: { clerkId },
-      include: {
-        assessments: {
-          orderBy: { createdAt: "desc" },
-          ...(limit ? { take: limit } : {}),
-          where: {
-            OR: [
-              { status: { not: "DRAFT" } },
-              { status: "DRAFT", responses: { some: {} } }
-            ]
-          },
-          include: { template: true, responses: true }
-        }
-      }
-    });
+  static getRecentAssessments(dataset: any, limit: number = 5) {
+    if (!dataset) return [];
 
-    if (!user) return [];
-
-    return user.assessments.map(a => {
+    const { assessments } = dataset;
+    
+    return assessments.slice(0, limit).map((a: any) => {
       let score = null;
-      if (a.status === "COMPLETED" && a.responses.length > 0) {
-        const answers: Record<string, number> = {};
-        a.responses.forEach(r => {
-          const val = typeof r.answer === 'object' && r.answer !== null && 'value' in r.answer 
-            ? Number((r.answer as { value: number }).value) 
-            : Number(r.answer);
-          answers[r.questionId] = isNaN(val) ? 0 : val;
-        });
-        score = RiskAssessmentService.calculateScore(answers);
+      if (a.status === "COMPLETED" && a.report) {
+        const reportJson = a.report.reportJson as any;
+        score = reportJson.totalScore ?? null;
       }
 
       return {
@@ -111,21 +67,10 @@ export class DashboardService {
   }
 
   /**
-   * Fetches insights placeholders for the User Dashboard.
+   * Derives insights from the unified dataset.
    */
-  static async getInsights(clerkId: string) {
-    const user = await prisma.user.findUnique({
-      where: { clerkId },
-      include: {
-        assessments: {
-          where: { status: "COMPLETED" },
-          orderBy: { createdAt: "asc" },
-          include: { responses: true }
-        }
-      }
-    });
-
-    if (!user || user.assessments.length === 0) {
+  static getInsights(dataset: any) {
+    if (!dataset) {
       return {
         scoreTrend: [] as { date: string, score: number }[],
         consistency: "Not enough data",
@@ -133,14 +78,22 @@ export class DashboardService {
       };
     }
 
-    const scoreTrend = user.assessments.map(a => {
-      let score = 0;
-      a.responses.forEach(r => {
-        const val = typeof r.answer === 'object' && r.answer !== null && 'value' in r.answer 
-          ? Number((r.answer as { value: number }).value) 
-          : Number(r.answer);
-        score += isNaN(val) ? 0 : val;
-      });
+    const completedAssessments = dataset.assessments.filter((a: any) => a.status === "COMPLETED");
+
+    if (completedAssessments.length === 0) {
+      return {
+        scoreTrend: [] as { date: string, score: number }[],
+        consistency: "Not enough data",
+        progressSummary: "Take your first assessment to begin generating insights."
+      };
+    }
+
+    // Trend requires ascending order (oldest to newest)
+    const chronological = [...completedAssessments].reverse();
+
+    const scoreTrend = chronological.map((a: any) => {
+      const reportJson = a.report?.reportJson as any;
+      const score = reportJson?.totalScore ?? 0;
       return {
         date: a.createdAt.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
         score

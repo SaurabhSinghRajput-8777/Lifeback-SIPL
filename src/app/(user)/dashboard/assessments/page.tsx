@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { Activity, Mic, ArrowRight } from "lucide-react";
 
+import { startAssessmentAction } from "./actions";
+
 export default function AssessmentsPage() {
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
@@ -12,10 +14,9 @@ export default function AssessmentsPage() {
       </div>
 
       <div className="grid md:grid-cols-2 gap-6">
-        {/* PHQ-9 Card (Active) */}
         <Link 
           href="/assessments/new"
-          className="group relative flex flex-col p-6 rounded-2xl border border-brand-secondary/30 bg-brand-secondary/5 hover:bg-brand-secondary/10 transition-all duration-300"
+          className="group relative flex flex-col p-6 rounded-2xl border border-brand-secondary/30 bg-brand-secondary/5 hover:bg-brand-secondary/10 transition-all duration-300 h-full"
         >
           <div className="absolute top-6 right-6 opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all duration-300">
             <ArrowRight className="w-5 h-5 text-brand-secondary" />
@@ -29,7 +30,7 @@ export default function AssessmentsPage() {
           <p className="text-muted-foreground text-sm leading-relaxed mb-6 flex-1">
             The Patient Health Questionnaire is a standard instrument for screening, diagnosing, monitoring, and measuring the severity of depression.
           </p>
-          <div className="flex items-center justify-between text-xs font-medium mt-auto">
+          <div className="flex items-center justify-between text-xs font-medium mt-auto w-full">
             <span className="text-brand-secondary">9 Questions</span>
             <span className="text-muted-foreground">~3 mins</span>
           </div>

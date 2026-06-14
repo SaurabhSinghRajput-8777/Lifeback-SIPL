@@ -31,18 +31,27 @@ export class AnonymousSessionService {
   }
 
   static async getSession() {
+    console.time("anonymousSession_getSession");
     const cookieStore = await cookies();
     const anonymousId = cookieStore.get(this.COOKIE_NAME)?.value;
 
-    if (!anonymousId) return null;
+    if (!anonymousId) {
+      console.timeEnd("anonymousSession_getSession");
+      return null;
+    }
 
-    return this.getSessionByAnonymousId(anonymousId);
+    const session = await this.getSessionByAnonymousId(anonymousId);
+    console.timeEnd("anonymousSession_getSession");
+    return session;
   }
 
   static async getSessionByAnonymousId(anonymousId: string) {
-    return prisma.anonymousSession.findUnique({
+    console.time("anonymousSession_getById");
+    const result = await prisma.anonymousSession.findUnique({
       where: { anonymousId },
     });
+    console.timeEnd("anonymousSession_getById");
+    return result;
   }
 
   static async convertSession(userId: string) {

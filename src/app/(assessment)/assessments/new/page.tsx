@@ -2,22 +2,20 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Loader2 } from "lucide-react";
-import { useAuth } from "@clerk/nextjs";
-import { AssessmentHeader } from "@/modules/assessment/components/AssessmentHeader";
+import { AssessmentSkeleton } from "@/modules/assessment/components/AssessmentSkeleton";
 
 export default function NewAssessmentPage() {
   const router = useRouter();
-  const { userId } = useAuth();
-  const exitUrl = userId ? "/dashboard" : "/";
 
   useEffect(() => {
+    let mounted = true;
+
     async function startAssessment() {
       try {
         const res = await fetch("/api/assessments/start", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ templateName: "PHQ9" }), // Defaulting to PHQ9 for now, future iterations will present a selection screen here
+          body: JSON.stringify({ templateName: "PHQ9" }), // Future iterations will present a selection screen
         });
 
         if (!res.ok) {
@@ -25,24 +23,25 @@ export default function NewAssessmentPage() {
         }
 
         const data = await res.json();
-        router.replace(`/assessments/${data.id}`);
+        
+        if (mounted) {
+          router.replace(`/assessments/${data.id}`);
+        }
       } catch (err) {
         console.error("Error starting assessment:", err);
+        // Optionally redirect back to dashboard on error
+        if (mounted) {
+          router.replace("/dashboard/assessments");
+        }
       }
     }
 
     startAssessment();
+
+    return () => {
+      mounted = false;
+    };
   }, [router]);
 
-  return (
-    <>
-      <AssessmentHeader exitUrl={exitUrl} isCompleted={false} />
-      <div className="flex flex-col items-center justify-center min-h-[60vh]">
-        <Loader2 className="h-8 w-8 animate-spin text-zinc-500 mb-4" />
-        <h2 className="text-xl font-medium text-zinc-700 dark:text-zinc-300">
-          Preparing your assessment...
-        </h2>
-      </div>
-    </>
-  );
+  return <AssessmentSkeleton />;
 }

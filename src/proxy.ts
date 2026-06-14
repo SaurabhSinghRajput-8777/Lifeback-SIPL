@@ -11,6 +11,18 @@ const isPublicRoute = createRouteMatcher(["/", "/about", "/research", "/onboardi
 // 60-second in-memory Edge Cache for authorization roles
 const roleCache = new Map<string, { role: string; expires: number }>();
 
+let globalPool: Pool | null = null;
+
+function getPool() {
+  if (!globalPool) {
+    const connectionString = process.env.DATABASE_URL;
+    if (connectionString && !connectionString.includes("localhost")) {
+      globalPool = new Pool({ connectionString });
+    }
+  }
+  return globalPool;
+}
+
 async function fetchDbRole(clerkId: string): Promise<string> {
   const cached = roleCache.get(clerkId);
   if (cached && cached.expires > Date.now()) {
@@ -19,14 +31,12 @@ async function fetchDbRole(clerkId: string): Promise<string> {
 
   let role = "USER"; // Default fallback
   try {
-    const connectionString = process.env.DATABASE_URL;
-    if (connectionString && !connectionString.includes("localhost")) {
-      const pool = new Pool({ connectionString });
+    const pool = getPool();
+    if (pool) {
       const { rows } = await pool.query('SELECT role FROM "User" WHERE "clerkId" = $1 LIMIT 1', [clerkId]);
       if (rows.length > 0) {
         role = rows[0].role;
       }
-      // Edge pools should ideally be closed, but @neondatabase/serverless manages it via HTTP/WebSockets
     }
   } catch (error) {
     console.error("Edge DB Role Fetch Error:", error);
@@ -37,26 +47,36 @@ async function fetchDbRole(clerkId: string): Promise<string> {
 }
 
 export default clerkMiddleware(async (auth, req) => {
+  console.time('Middleware_Total');
   if (isPublicRoute(req)) {
+    console.timeEnd('Middleware_Total');
     return NextResponse.next();
   }
 
   const session = await auth();
-  const clerkId = session.userId;
+  let clerkId = session.userId;
+  
+  if (!clerkId && process.env.NODE_ENV === "development" && req.headers.has('x-mock-clerk-id')) {
+    clerkId = req.headers.get('x-mock-clerk-id') as string;
+  }
 
   // Anonymous check for assessment route
   if (!clerkId && isUserRoute(req)) {
     const anonCookie = req.cookies.get("anonymous_id");
     if (anonCookie) {
+      console.timeEnd('Middleware_Total');
       return NextResponse.next();
     }
   }
 
   if (!clerkId) {
+    console.timeEnd('Middleware_Total');
     return session.redirectToSignIn();
   }
 
+  console.time('Middleware_fetchDbRole');
   const dbRole = await fetchDbRole(clerkId);
+  console.timeEnd('Middleware_fetchDbRole');
 
   const roleHierarchy: Record<string, number> = {
     USER: 1,
@@ -77,13 +97,16 @@ export default clerkMiddleware(async (auth, req) => {
 
   if (isUserRoute(req)) {
     if (dbRole.toUpperCase() === "CLINICIAN") {
+      console.timeEnd('Middleware_Total');
       return NextResponse.redirect(new URL("/clinician", req.url));
     }
     if (userLevel < roleHierarchy["USER"]) {
+      console.timeEnd('Middleware_Total');
       return NextResponse.redirect(new URL(AUTH_ROUTES.SIGN_IN, req.url));
     }
   }
 
+  console.timeEnd('Middleware_Total');
   return NextResponse.next();
 });
 

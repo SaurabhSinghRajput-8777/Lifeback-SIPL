@@ -18,7 +18,7 @@ export default async function AnonymousAssessmentPage({
 
   const exitUrl = "/";
 
-  return (
+  const result = (
     <AssessmentRenderer 
       assessmentId="anonymous" 
       templateConfig={template.config as unknown as AssessmentTemplateConfig}
@@ -27,4 +27,5 @@ export default async function AnonymousAssessmentPage({
       exitUrl={exitUrl}
     />
   );
+  return result;
 }

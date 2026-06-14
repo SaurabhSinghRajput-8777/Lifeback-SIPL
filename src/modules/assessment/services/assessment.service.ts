@@ -84,6 +84,13 @@ export class AssessmentService {
 
     await AssessmentRepository.updateStatus(assessmentId, AssessmentStatus.COMPLETED);
 
+    // Calculate high risk directly using the raw responses
+    // For PHQ-9, question 9 is 'phq9_9'
+    const isHighRisk = result.severity === "Severe" || result.severity === "Moderately Severe" || 
+      (responsesMap["phq9_9"] !== undefined && Number(responsesMap["phq9_9"]) > 0);
+
+    const reportJson = { ...result, isHighRisk } as unknown as Prisma.InputJsonObject;
+
     const report = await AssessmentRepository.saveReport(assessmentId, {
       assessmentId,
       modelVersion: result.providerVersion,
@@ -91,7 +98,7 @@ export class AssessmentService {
       reportSchemaVersion: "1.0.0",
       riskLevel: result.severity,
       confidenceScore: 1.0,
-      reportJson: result as unknown as Prisma.InputJsonObject,
+      reportJson,
     });
 
     await AuditLogService.logEvent(

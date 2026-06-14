@@ -44,31 +44,30 @@ export function AssessmentRenderer({
   const isReviewScreen = currentIndex === questions.length;
   const progressPercentage = Math.round((Math.min(currentIndex, questions.length) / questions.length) * 100);
 
-  const handleNext = async (overrideValue?: unknown) => {
+  const handleNext = (overrideValue?: unknown) => {
     const currentQuestion = questions[currentIndex];
     if (!currentQuestion) return;
     
     const valToSave = overrideValue !== undefined ? overrideValue : responses[currentQuestion.id];
     if (valToSave === undefined || valToSave === null) return;
     
-    setIsSaving(true);
+    // 1. Optimistic UI Update - advance immediately
+    setCurrentIndex(curr => curr + 1);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     setError(null);
-    try {
-      if (mode === "authenticated") {
-        const res = await fetch(`/api/assessments/${assessmentId}/response`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ questionId: currentQuestion.id, answer: valToSave }),
-        });
-        if (!res.ok) throw new Error("Failed to save response");
-      }
-      
-      setCurrentIndex(curr => curr + 1);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "An unexpected error occurred");
-    } finally {
-      setIsSaving(false);
+    
+    // 2. Fire-and-forget background save for authenticated users
+    if (mode === "authenticated") {
+      fetch(`/api/assessments/${assessmentId}/response`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ questionId: currentQuestion.id, answer: valToSave }),
+      }).then(res => {
+        if (!res.ok) throw new Error("Failed to save previous response.");
+      }).catch(err => {
+        console.error("Background save error:", err);
+        setError("Network error: Your last answer might not have saved correctly.");
+      });
     }
   };
 

@@ -65,7 +65,7 @@ export function Header() {
           : "bg-transparent border-transparent"
       )}
     >
-      <div className="w-full max-w-[1440px] mx-auto px-6 md:px-10 lg:px-16 xl:px-20 h-16 sm:h-20 flex items-center justify-between">
+      <div className="w-full px-6 md:px-10 lg:px-16 xl:px-20 h-16 sm:h-20 flex items-center justify-between">
         <Link href={userId ? "/dashboard" : "/"} onClick={handleLogoClick} className="flex items-center gap-2 group">
           <Image src="/lifeback_logo.png" alt="LifeBack Logo" width={32} height={32} className="object-contain rounded-full group-hover:scale-105 transition-transform duration-300 cursor-pointer dark:hidden" />
           <Image src="/lifeback_logo_white.png" alt="LifeBack Logo" width={32} height={32} className="object-contain rounded-full group-hover:scale-105 transition-transform duration-300 cursor-pointer hidden dark:block" />

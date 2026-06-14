@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { Info, AlertTriangle, AlertCircle, CheckCircle2, Home } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { SignUpButton } from "@clerk/nextjs";
+import { CreateAccountButton } from "@/components/auth/CreateAccountButton";
 import Link from "next/link";
 
 export function AssessmentResults({ result, isAnonymous }: { result: AssessmentResult; isAnonymous?: boolean }) {
@@ -122,11 +122,9 @@ export function AssessmentResults({ result, isAnonymous }: { result: AssessmentR
               </div>
               
               <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
-                <SignUpButton mode="modal">
-                  <Button size="lg" className="w-full sm:w-auto h-14 px-8 rounded-full font-semibold bg-zinc-900 hover:bg-zinc-800 text-white dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-200 shadow-lg shadow-black/5 dark:shadow-none transition-all hover:scale-[1.02]">
-                    Create Free Account
-                  </Button>
-                </SignUpButton>
+                <CreateAccountButton size="lg" className="w-full sm:w-auto h-14 px-8 rounded-full font-semibold bg-zinc-900 hover:bg-zinc-800 text-white dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-200 shadow-lg shadow-black/5 dark:shadow-none transition-all hover:scale-[1.02]">
+                  Create Free Account
+                </CreateAccountButton>
                 <Link href="/" className="w-full sm:w-auto">
                   <Button variant="outline" size="lg" className="w-full h-14 px-8 rounded-full font-medium border-2 border-zinc-200 dark:border-slate-700 text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-slate-800 dark:hover:text-white transition-colors">
                     Maybe Later

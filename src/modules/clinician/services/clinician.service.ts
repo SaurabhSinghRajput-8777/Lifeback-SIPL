@@ -1,38 +1,13 @@
 import { ClinicianRepository } from "../repositories/clinician.repository";
 import { RiskAssessmentService } from "@/modules/dashboard/services/risk-assessment.service";
+import { prisma } from "@/lib/prisma/client";
 
 export class ClinicianService {
   /**
    * Fetches overview metrics for the Clinician Dashboard.
    */
   static async getClinicianOverview() {
-    const data = await ClinicianRepository.getOverviewCounts();
-
-    // Calculate High Risk count
-    let highRiskCount = 0;
-    for (const assessment of data.allCompleted) {
-      const answers: Record<string, number> = {};
-      assessment.responses.forEach(r => {
-        const val = typeof r.answer === 'object' && r.answer !== null && 'value' in r.answer 
-          ? Number((r.answer as { value: number }).value) 
-          : Number(r.answer);
-        answers[r.questionId] = isNaN(val) ? 0 : val;
-      });
-      
-      const score = RiskAssessmentService.calculateScore(answers);
-      const isHighRisk = RiskAssessmentService.isHighRisk(score, answers["phq9_9"]);
-      
-      if (isHighRisk) {
-        highRiskCount++;
-      }
-    }
-
-    return {
-      totalPatients: data.totalPatients,
-      pendingReview: data.pendingReview,
-      reviewed: data.reviewed,
-      highRisk: highRiskCount
-    };
+    return ClinicianRepository.getOverviewCounts();
   }
 
   /**
@@ -52,16 +27,10 @@ export class ClinicianService {
         date = latest.createdAt;
         reviewStatus = latest.reviewStatus;
         
-        if (latest.status === "COMPLETED") {
-          const answers: Record<string, number> = {};
-          latest.responses.forEach(r => {
-            const val = typeof r.answer === 'object' && r.answer !== null && 'value' in r.answer 
-              ? Number((r.answer as { value: number }).value) 
-              : Number(r.answer);
-            answers[r.questionId] = isNaN(val) ? 0 : val;
-          });
-          latestScore = RiskAssessmentService.calculateScore(answers);
-          severity = RiskAssessmentService.getSeverity(latestScore);
+        if (latest.status === "COMPLETED" && latest.report) {
+          const reportJson = latest.report.reportJson as any;
+          latestScore = reportJson.totalScore ?? null;
+          severity = latest.report.riskLevel || "N/A";
         }
       }
 
@@ -77,39 +46,42 @@ export class ClinicianService {
   }
 
   /**
-   * Fetches the high-risk queue.
+   * Fetches the high-risk queue directly from the database.
    */
   static async getHighRiskQueue() {
-    const data = await ClinicianRepository.getOverviewCounts();
-    const queue = [];
-
-    for (const assessment of data.allCompleted) {
-      if (assessment.reviewStatus === "REVIEWED") continue; // Optionally hide reviewed high-risk
-
-      const answers: Record<string, number> = {};
-      assessment.responses.forEach(r => {
-        const val = typeof r.answer === 'object' && r.answer !== null && 'value' in r.answer 
-          ? Number((r.answer as { value: number }).value) 
-          : Number(r.answer);
-        answers[r.questionId] = isNaN(val) ? 0 : val;
-      });
-      
-      const score = RiskAssessmentService.calculateScore(answers);
-      const isHighRisk = RiskAssessmentService.isHighRisk(score, answers["phq9_9"]);
-      
-      if (isHighRisk) {
-        queue.push({
-          assessmentId: assessment.id,
-          userId: assessment.userId,
-          score,
-          severity: RiskAssessmentService.getSeverity(score),
-          date: assessment.createdAt,
-          reviewStatus: assessment.reviewStatus
-        });
+    const highRiskReports = await prisma.assessmentReport.findMany({
+      where: {
+        assessment: { reviewStatus: "PENDING" }, // Only show pending in the queue
+        reportJson: {
+          path: ['isHighRisk'],
+          equals: true
+        }
+      },
+      include: {
+        assessment: {
+          select: {
+            id: true,
+            userId: true,
+            createdAt: true,
+            reviewStatus: true
+          }
+        }
+      },
+      orderBy: {
+        generatedAt: 'desc'
       }
-    }
+    });
 
-    // Sort by most recent
-    return queue.sort((a, b) => b.date.getTime() - a.date.getTime());
+    return highRiskReports.map(report => {
+      const reportJson = report.reportJson as any;
+      return {
+        assessmentId: report.assessment.id,
+        userId: report.assessment.userId,
+        score: reportJson.totalScore ?? 0,
+        severity: report.riskLevel || "N/A",
+        date: report.assessment.createdAt,
+        reviewStatus: report.assessment.reviewStatus
+      };
+    });
   }
 }

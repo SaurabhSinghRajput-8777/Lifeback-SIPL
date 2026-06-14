@@ -11,11 +11,24 @@ export class ClinicianRepository {
         role: "USER",
         assessments: { some: {} }
       },
-      include: {
+      select: {
+        id: true,
+        email: true,
         assessments: {
           orderBy: { createdAt: "desc" },
           take: 1,
-          include: { responses: true }
+          select: {
+            id: true,
+            createdAt: true,
+            status: true,
+            reviewStatus: true,
+            report: {
+              select: {
+                riskLevel: true,
+                reportJson: true
+              }
+            }
+          }
         }
       }
     });
@@ -25,33 +38,32 @@ export class ClinicianRepository {
    * Fetches the counts for clinician overview metrics.
    */
   static async getOverviewCounts() {
-    const totalPatients = await prisma.user.count({
-      where: { role: "USER", assessments: { some: {} } }
-    });
+    const [totalPatients, pendingReview, reviewed, highRisk] = await Promise.all([
+      prisma.user.count({
+        where: { role: "USER", assessments: { some: {} } }
+      }),
+      prisma.assessment.count({
+        where: { 
+          status: AssessmentStatus.COMPLETED,
+          reviewStatus: AssessmentReviewStatus.PENDING 
+        }
+      }),
+      prisma.assessment.count({
+        where: { 
+          reviewStatus: AssessmentReviewStatus.REVIEWED 
+        }
+      }),
+      prisma.assessmentReport.count({
+        where: {
+          reportJson: {
+            path: ['isHighRisk'],
+            equals: true
+          }
+        }
+      })
+    ]);
 
-    const pendingReview = await prisma.assessment.count({
-      where: { 
-        status: AssessmentStatus.COMPLETED,
-        reviewStatus: AssessmentReviewStatus.PENDING 
-      }
-    });
-
-    const reviewed = await prisma.assessment.count({
-      where: { 
-        reviewStatus: AssessmentReviewStatus.REVIEWED 
-      }
-    });
-
-    // To get high-risk count, we usually have to evaluate the responses or reports.
-    // For MVP, we will fetch all completed assessments and filter in memory, 
-    // or rely on a cron-job / report riskLevel. Since we are creating the MVP,
-    // we will fetch pending and evaluate.
-    const allCompleted = await prisma.assessment.findMany({
-      where: { status: AssessmentStatus.COMPLETED },
-      include: { responses: true }
-    });
-
-    return { totalPatients, pendingReview, reviewed, allCompleted };
+    return { totalPatients, pendingReview, reviewed, highRisk };
   }
 
   /**
@@ -60,10 +72,24 @@ export class ClinicianRepository {
   static async getPatientDetails(patientId: string) {
     return prisma.user.findUnique({
       where: { id: patientId },
-      include: {
+      select: {
+        id: true,
+        email: true,
         assessments: {
           orderBy: { createdAt: "desc" },
-          include: { responses: true, clinicalNotes: true }
+          select: {
+            id: true,
+            status: true,
+            createdAt: true,
+            reviewStatus: true,
+            clinicalNotes: true,
+            report: {
+              select: {
+                riskLevel: true,
+                reportJson: true
+              }
+            }
+          }
         },
         patientNotes: {
           orderBy: { createdAt: "desc" },

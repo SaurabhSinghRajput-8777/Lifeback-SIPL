@@ -8,17 +8,24 @@ export const dynamic = "force-dynamic";
 
 export async function POST(req: Request) {
   try {
-    const session = await AnonymousSessionService.getSession();
-    let dbSessionId: string;
+    // Currently only supporting PHQ9 in this flow
+    const templateName = "PHQ9";
 
-    if (!session) {
-      const newSession = await AnonymousSessionService.createSession();
-      dbSessionId = newSession.id;
-    } else {
-      dbSessionId = session.id;
-      // Extend session TTL since they are active
-      await AnonymousSessionService.extendTTL(session.anonymousId);
-    }
+    // Run independent tasks in parallel
+    const templatePromise = TemplateRepository.findByName(templateName);
+    const bodyPromise = req.json();
+    const sessionPromise = AnonymousSessionService.getSession().then(async session => {
+      if (!session) {
+        const newSession = await AnonymousSessionService.createSession();
+        return newSession.id;
+      } else {
+        // Extend session TTL since they are active
+        await AnonymousSessionService.extendTTL(session.anonymousId);
+        return session.id;
+      }
+    });
+
+    const [template, body, dbSessionId] = await Promise.all([templatePromise, bodyPromise, sessionPromise]);
 
     // Rate Limiting: Max 10 per hour per session
     const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
@@ -33,16 +40,11 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Rate limit exceeded. Please try again later." }, { status: 429 });
     }
 
-    const body = await req.json();
     const { responses, completionSource, durationSeconds } = body;
 
     if (!responses || typeof responses !== 'object') {
       return NextResponse.json({ error: "Invalid responses format" }, { status: 400 });
     }
-
-    // Currently only supporting PHQ9 in this flow
-    const templateName = "PHQ9";
-    const template = await TemplateRepository.findByName(templateName);
     
     if (!template) {
       return NextResponse.json({ error: "Template not found" }, { status: 404 });

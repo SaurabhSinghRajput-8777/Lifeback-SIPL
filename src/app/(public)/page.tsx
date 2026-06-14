@@ -55,7 +55,7 @@ export default async function Home() {
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4">
-                <Link href={userId ? "/dashboard" : "/assessments/anonymous?source=LANDING_PAGE"}>
+                <Link href={userId ? "/dashboard" : "/assessments/anonymous?source=LANDING_PAGE"} prefetch={true}>
                   <Button size="lg" className="cursor-pointer w-full sm:w-auto h-14 px-8 rounded-none font-heading font-bold text-[15px] bg-foreground text-background hover:bg-foreground/90 transition-colors">
                     {userId ? "Go  To  Dashboard" : "Take Anonymous Assessment"} <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
@@ -281,7 +281,7 @@ export default async function Home() {
 
           <div className="relative z-10 max-w-[1440px] mx-auto text-center px-4">
             <h2 className="text-4xl sm:text-[48px] md:text-[64px] font-heading font-bold text-foreground mb-6 md:mb-8 tracking-tight break-words">Begin Evaluation</h2>
-            <Link href={userId ? "/assessments/new" : "/assessments/anonymous?source=LANDING_PAGE"}>
+            <Link href={userId ? "/assessments/new" : "/assessments/anonymous?source=LANDING_PAGE"} prefetch={true}>
               <Button size="lg" className="cursor-pointer h-auto py-4 md:py-0 md:h-16 px-6 md:px-12 rounded-none text-sm md:text-[16px] font-heading font-bold bg-foreground text-background hover:bg-foreground/90 transition-colors shadow-2xl whitespace-normal text-center max-w-full">
                 {userId ? "Start PHQ-9 Assessment" : "Start Anonymous PHQ-9 Assessment"}
               </Button>

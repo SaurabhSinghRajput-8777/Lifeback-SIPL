@@ -133,6 +133,8 @@ model AssessmentTemplate {
   deprecatedAt DateTime? @db.Timestamptz
 
   assessments Assessment[]
+
+  @@index([name, isActive])
 }
 
 model Assessment {

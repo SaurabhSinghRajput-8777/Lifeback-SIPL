@@ -55,16 +55,11 @@ export default async function PatientReviewPage({
             {patient.assessments.map(a => {
               let score = null;
               let severity = "N/A";
-              if (a.status === "COMPLETED") {
-                const answers: Record<string, number> = {};
-                a.responses.forEach(r => {
-                  const val = typeof r.answer === 'object' && r.answer !== null && 'value' in r.answer 
-                    ? Number((r.answer as { value: number }).value) 
-                    : Number(r.answer);
-                  answers[r.questionId] = isNaN(val) ? 0 : val;
-                });
-                score = RiskAssessmentService.calculateScore(answers);
-                severity = RiskAssessmentService.getSeverity(score);
+              if (a.status === "COMPLETED" && (a as any).report) {
+                const report = (a as any).report;
+                const reportJson = report.reportJson as any;
+                score = reportJson.totalScore ?? null;
+                severity = report.riskLevel || "N/A";
               }
 
               return (

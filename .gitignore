@@ -129,3 +129,5 @@ check-*.ts
 check-*.js
 check-*.mjs
 seed-*.ts
+audit-*.mjs
+measure-*.mjs

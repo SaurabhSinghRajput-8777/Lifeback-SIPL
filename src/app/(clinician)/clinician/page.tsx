@@ -8,9 +8,11 @@ export default async function ClinicianDashboardPage() {
   const clerkUser = await currentUser();
   if (!clerkUser) redirect("/sign-in");
 
-  const overview = await ClinicianService.getClinicianOverview();
-  const queue = await ClinicianService.getHighRiskQueue();
-  const patients = await ClinicianService.getPatientTable();
+  const [overview, queue, patients] = await Promise.all([
+    ClinicianService.getClinicianOverview(),
+    ClinicianService.getHighRiskQueue(),
+    ClinicianService.getPatientTable()
+  ]);
 
   return (
     <div className="space-y-10 animate-in fade-in duration-500">

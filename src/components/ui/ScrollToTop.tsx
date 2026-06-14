@@ -87,7 +87,7 @@ export function ScrollToTop() {
       id="scroll-to-top-btn"
       onClick={scrollToTop}
       className={cn(
-        "fixed bottom-8 right-8 p-3 md:p-4 rounded-full transition-all duration-300 z-[9999] hover:scale-110 shadow-lg border",
+        "fixed bottom-8 right-8 p-3 md:p-4 rounded-full transition-all duration-300 z-[9999] hover:scale-110 shadow-lg border cursor-pointer",
         isDarkBg 
           ? "bg-white text-black border-white/20 shadow-black/20" 
           : "bg-[#121214] text-white border-black/10 shadow-black/10",
